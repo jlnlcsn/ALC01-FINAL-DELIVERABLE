@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;min-height:100%;background:#0a1628;}
+#app{font-family:'Crimson Text',Georgia,serif;background:#0a1628;min-height:100vh;overflow-x:hidden;}
+
+/* PAGE 1 */
+#page-landing{
+  min-height:100vh;
+  background:radial-gradient(ellipse at 50% 0%,#0d3560 0%,#0a1628 55%,#06261a 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:3rem 2rem;position:relative;
+  transition:opacity 0.9s ease,transform 0.9s ease;
+}
+.stars-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.star{position:absolute;background:#fff;border-radius:50%;animation:twinkle 2s infinite alternate;}
+@keyframes twinkle{0%{opacity:0.2;}100%{opacity:0.95;}}
+.waves-bottom{position:absolute;bottom:0;left:0;right:0;height:80px;overflow:hidden;}
+.waves-bottom svg{width:100%;height:100%;}
+.anchor-icon{font-size:80px;margin-bottom:1.2rem;animation:float 3.5s ease-in-out infinite;filter:drop-shadow(0 0 24px rgba(218,165,32,0.5));}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-12px) rotate(2deg);}}
+.main-title{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(2.8rem,6vw,5rem);color:#DAA520;text-align:center;letter-spacing:0.12em;text-shadow:0 0 40px rgba(218,165,32,0.55),3px 3px 0 #6b4f10;line-height:1.05;margin-bottom:0.4rem;}
+.main-sub{font-family:'Cinzel',serif;font-size:1rem;color:#a8c4d4;letter-spacing:0.35em;text-transform:uppercase;margin-bottom:1.6rem;}
+.tagline-box{font-size:1.25rem;color:#c9dfe8;font-style:italic;text-align:center;max-width:560px;line-height:1.75;margin-bottom:2.5rem;padding:1.25rem 2rem;border:1px solid rgba(218,165,32,0.35);border-radius:8px;background:rgba(0,0,0,0.35);position:relative;}
+.tagline-box::before,.tagline-box::after{content:'✦';position:absolute;top:-12px;background:#0a1628;padding:0 8px;color:#DAA520;font-size:1.1rem;}
+.tagline-box::before{left:24px;}.tagline-box::after{right:24px;}
+.crew-title{font-family:'Cinzel',serif;font-size:0.85rem;color:#DAA520;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:1rem;text-align:center;}
+.crew-grid{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem;}
+.crew-card{display:flex;flex-direction:column;align-items:center;gap:0.5rem;cursor:pointer;}
+.crew-avatar{width:64px;height:64px;border-radius:50%;border:2px solid #DAA520;display:flex;align-items:center;justify-content:center;font-size:2rem;background:rgba(0,0,0,0.4);transition:transform 0.25s,box-shadow 0.25s;}
+.crew-card:hover .crew-avatar{transform:scale(1.12) rotate(-5deg);box-shadow:0 0 20px rgba(218,165,32,0.6);}
+.crew-name{font-size:0.9rem;color:#c9dfe8;text-align:center;max-width:90px;line-height:1.3;}
+.crew-role{font-size:0.72rem;color:#7a9eb0;text-align:center;font-style:italic;}
+.btn-sail{font-family:'Cinzel',serif;font-size:1.2rem;font-weight:700;color:#0a1628;background:linear-gradient(135deg,#c8960c,#f0c830,#c8960c);border:none;padding:1rem 3.5rem;border-radius:5px;cursor:pointer;letter-spacing:0.18em;text-transform:uppercase;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 4px 24px rgba(218,165,32,0.45),inset 0 1px 0 rgba(255,255,255,0.35);position:relative;overflow:hidden;}
+.btn-sail:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 10px 36px rgba(218,165,32,0.65);}
+.btn-sail::after{content:'';position:absolute;top:0;left:-120%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.35),transparent);transition:left 0.55s;}
+.btn-sail:hover::after{left:160%;}
+
+/* CREW MODAL */
+.crew-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:300;align-items:center;justify-content:center;padding:1.5rem;}
+.crew-modal-overlay.open{display:flex;}
+.crew-scroll{background:linear-gradient(145deg,#1a2a45,#0d1e35);border:2px solid #DAA520;border-radius:14px;max-width:480px;width:100%;padding:2.5rem 2rem 2rem;position:relative;box-shadow:0 0 60px rgba(218,165,32,0.25),0 24px 70px rgba(0,0,0,0.8);animation:unfurl 0.4s cubic-bezier(0.34,1.56,0.64,1);}
+@keyframes unfurl{from{transform:scaleY(0.2) scaleX(0.7);opacity:0;}to{transform:scaleY(1) scaleX(1);opacity:1;}}
+.crew-close{position:absolute;top:14px;right:14px;background:rgba(218,165,32,0.2);color:#DAA520;border:1px solid #DAA520;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
+.crew-close:hover{background:rgba(218,165,32,0.4);}
+.crew-modal-avatar{width:80px;height:80px;border-radius:50%;border:3px solid #DAA520;display:flex;align-items:center;justify-content:center;font-size:3rem;background:rgba(0,0,0,0.4);margin:0 auto 1rem;box-shadow:0 0 20px rgba(218,165,32,0.4);}
+.crew-modal-name{font-family:'Cinzel',serif;font-size:1.4rem;font-weight:700;color:#DAA520;text-align:center;margin-bottom:0.2rem;}
+.crew-modal-role{font-family:'Cinzel',serif;font-size:0.85rem;color:#a8c4d4;letter-spacing:0.2em;text-align:center;margin-bottom:1.2rem;text-transform:uppercase;}
+.crew-modal-divider{border:none;border-top:1px solid rgba(218,165,32,0.3);margin:1rem 0;}
+.crew-modal-bio{font-size:1.05rem;color:#c9dfe8;line-height:1.75;text-align:center;font-style:italic;}
+.crew-modal-duties{margin-top:1rem;}
+.crew-modal-duties li{font-size:0.95rem;color:#a8c4d4;line-height:1.7;margin-left:1.2rem;}
+
+/* PAGE 2 MAP */
+#page-map{display:none;min-height:100vh;position:relative;overflow:hidden;}
+#page-map.visible{display:block;}
+.map-header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0.7rem 1.5rem;background:rgba(20,12,5,0.93);border-bottom:3px solid #7a5a10;backdrop-filter:blur(8px);}
+.map-title-hdr{font-family:'Cinzel',serif;font-size:1.2rem;color:#DAA520;letter-spacing:0.12em;}
+.progress-wrap{display:flex;align-items:center;gap:10px;}
+.progress-lbl{font-family:'Cinzel',serif;font-size:0.85rem;color:#c9b87a;}
+.progress-track{width:140px;height:10px;background:rgba(80,50,10,0.5);border-radius:5px;overflow:hidden;border:1px solid rgba(218,165,32,0.5);}
+.progress-fill{height:100%;background:linear-gradient(90deg,#8a5a08,#f0c830,#8a5a08);border-radius:5px;transition:width 0.45s ease;}
+.btn-back{font-family:'Cinzel',serif;font-size:0.8rem;color:#c9b87a;background:rgba(60,35,5,0.6);border:1px solid rgba(160,120,40,0.6);padding:0.35rem 0.9rem;border-radius:4px;cursor:pointer;transition:all 0.2s;}
+.btn-back:hover{color:#DAA520;border-color:#DAA520;background:rgba(80,50,5,0.8);}
+
+/* INFO BUTTON */
+.btn-info{font-family:'Cinzel',serif;font-size:0.85rem;font-weight:700;color:#0a1628;background:linear-gradient(135deg,#c8960c,#f0c830);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(218,165,32,0.5);transition:transform 0.2s,box-shadow 0.2s;flex-shrink:0;}
+.btn-info:hover{transform:scale(1.1);box-shadow:0 4px 16px rgba(218,165,32,0.7);}
+
+/* ANSWERS MODAL */
+.answers-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:400;align-items:center;justify-content:center;padding:1.5rem;}
+.answers-overlay.open{display:flex;}
+.answers-scroll{background:#f0e0b0;border:4px solid #7a5a10;border-radius:12px;max-width:640px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 24px 70px rgba(0,0,0,0.8);}
+.answers-header{background:#7a5a10;padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-radius:8px 8px 0 0;}
+.answers-title{font-family:'Cinzel',serif;font-size:1.1rem;color:#f0d070;letter-spacing:0.1em;}
+.answers-close{background:rgba(0,0,0,0.3);color:#f0d070;border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;}
+.answers-body{padding:1.5rem;}
+.answer-row{display:flex;gap:0.75rem;padding:0.6rem 0;border-bottom:1px solid rgba(120,80,10,0.2);align-items:flex-start;}
+.answer-num{font-family:'Cinzel',serif;font-size:0.8rem;color:#7a5010;min-width:28px;padding-top:2px;}
+.answer-name{font-family:'Cinzel',serif;font-size:0.85rem;color:#3a1e00;font-weight:600;flex:0 0 180px;}
+.answer-val{font-size:0.9rem;color:#3a1e00;flex:1;}
+
+#treasure-map-wrap{position:relative;width:100%;padding-top:56px;overflow-y:auto;overflow-x:hidden;}
+#treasure-canvas{position:relative;width:100%;}
+#map-svg-container{position:relative;width:100%;overflow:visible;}
+#main-map-svg{width:100%;display:block;}
+
+/* SPOTS */
+.t-spot{position:absolute;transform:translate(-50%,-50%);cursor:pointer;z-index:20;display:flex;flex-direction:column;align-items:center;gap:2px;transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1);}
+.t-spot:hover{transform:translate(-50%,-60%) scale(1.15);z-index:30;}
+.t-chest{width:52px;height:52px;background:radial-gradient(circle at 35% 30%,#f0d060,#a06010);border-radius:6px 6px 4px 4px;border:2px solid #6a3808;box-shadow:0 4px 12px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,230,100,0.4);display:flex;align-items:center;justify-content:center;font-size:1.8rem;position:relative;transition:box-shadow 0.2s;}
+.t-chest::before{content:'';position:absolute;top:40%;left:0;right:0;height:3px;background:rgba(80,40,5,0.7);}
+.t-spot:hover .t-chest{box-shadow:0 0 18px rgba(255,200,50,0.8),0 4px 12px rgba(0,0,0,0.5);}
+.t-spot.found .t-chest{background:radial-gradient(circle at 35% 30%,#90ff90,#206020);border-color:#186018;box-shadow:0 0 14px rgba(80,220,80,0.7);}
+.t-spot.locked-spot{pointer-events:none;opacity:0.35;filter:grayscale(0.8);}
+.t-spot-label{font-family:'Cinzel',serif;font-size:0.72rem;color:#3a1e00;background:rgba(240,210,120,0.95);padding:2px 7px;border-radius:3px;max-width:110px;text-align:center;line-height:1.4;border:1px solid rgba(100,60,10,0.4);white-space:normal;word-break:break-word;box-shadow:0 1px 4px rgba(0,0,0,0.35);}
+.t-spot-num{font-family:'Cinzel',serif;font-size:0.65rem;color:rgba(80,40,5,0.8);}
+@keyframes chestPulse{0%,100%{box-shadow:0 4px 12px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,230,100,0.4);}50%{box-shadow:0 4px 12px rgba(0,0,0,0.5),0 0 10px rgba(255,200,50,0.5),inset 0 1px 0 rgba(255,230,100,0.4);}}
+.t-spot:not(.found):not(.locked-spot) .t-chest{animation:chestPulse 3s ease-in-out infinite;}
+
+/* HOME PORT SPOT */
+.home-port-spot{position:absolute;transform:translate(-50%,-50%);cursor:pointer;z-index:20;display:flex;flex-direction:column;align-items:center;gap:3px;transition:transform 0.2s;}
+.home-port-spot:hover{transform:translate(-50%,-60%) scale(1.1);z-index:30;}
+.home-port-icon{font-size:2.5rem;filter:drop-shadow(0 2px 8px rgba(218,165,32,0.6));animation:portGlow 2.5s ease-in-out infinite;}
+@keyframes portGlow{0%,100%{filter:drop-shadow(0 2px 8px rgba(218,165,32,0.4));}50%{filter:drop-shadow(0 2px 18px rgba(218,165,32,0.9));}}
+.home-port-label{font-family:'Cinzel',serif;font-size:0.75rem;color:#3a1e00;background:rgba(240,210,120,0.95);padding:2px 8px;border-radius:3px;border:1px solid rgba(100,60,10,0.4);box-shadow:0 1px 4px rgba(0,0,0,0.35);}
+
+/* END PORT (treasure destination) */
+.end-port-spot{position:absolute;transform:translate(-50%,-50%);cursor:pointer;z-index:20;display:flex;flex-direction:column;align-items:center;gap:3px;transition:transform 0.2s;}
+.end-port-spot:hover{transform:translate(-50%,-60%) scale(1.1);z-index:30;}
+.end-port-chest{font-size:2.5rem;filter:drop-shadow(0 0 14px rgba(255,215,0,0.8));animation:endGlow 1.8s ease-in-out infinite;}
+@keyframes endGlow{0%,100%{filter:drop-shadow(0 0 10px rgba(255,215,0,0.5)) grayscale(0.7);}50%{filter:drop-shadow(0 0 24px rgba(255,215,0,1)) grayscale(0);}}
+.end-port-spot.unlocked-end .end-port-chest{animation:endGlowBright 1.2s ease-in-out infinite;}
+@keyframes endGlowBright{0%,100%{filter:drop-shadow(0 0 18px rgba(255,215,0,0.9));}50%{filter:drop-shadow(0 0 36px rgba(255,215,0,1));}}
+.end-port-label{font-family:'Cinzel',serif;font-size:0.75rem;color:#1a0060;background:rgba(200,210,255,0.95);padding:2px 8px;border-radius:3px;border:1px solid rgba(80,80,200,0.4);box-shadow:0 1px 4px rgba(0,0,0,0.35);}
+
+/* SHIP */
+#ship-marker{position:absolute;transform:translate(-50%,-50%);z-index:25;pointer-events:none;transition:left 1.2s cubic-bezier(0.45,0,0.55,1),top 1.2s cubic-bezier(0.45,0,0.55,1);}
+.ship-svg-wrap{animation:shipBob 3s ease-in-out infinite;filter:drop-shadow(0 4px 10px rgba(0,0,0,0.6));}
+@keyframes shipBob{0%,100%{transform:translateY(0) rotate(-1deg);}50%{transform:translateY(-5px) rotate(1deg);}}
+
+/* LOCK VEIL */
+.map-lock-veil{display:none;position:absolute;inset:0;background:rgba(30,15,0,0.82);border-radius:12px;align-items:center;justify-content:center;flex-direction:column;gap:0.75rem;z-index:30;backdrop-filter:blur(4px);}
+.map-lock-veil.active{display:flex;}
+.lock-icon-big{font-size:3rem;animation:pulseLock 2s ease-in-out infinite;}
+@keyframes pulseLock{0%,100%{transform:scale(1);}50%{transform:scale(1.08);}}
+.lock-msg{font-family:'Cinzel',serif;font-size:0.9rem;color:rgba(220,190,100,0.9);text-align:center;padding:0 2rem;line-height:1.6;}
+
+/* WAVE ANIMATIONS */
+@keyframes dashMove{from{stroke-dashoffset:0;}to{stroke-dashoffset:-40;}}
+.route-path{stroke-dasharray:10 6;animation:dashMove 3s linear infinite;}
+@keyframes waveDrift{from{stroke-dashoffset:0;}to{stroke-dashoffset:-60;}}
+.wave-line{stroke-dasharray:20 8;animation:waveDrift 4s linear infinite;}
+
+#spots-layer{position:absolute;top:0;left:0;pointer-events:none;}
+#spots-layer .t-spot{pointer-events:all;}
+#finals-veil{position:absolute;left:0;right:0;background:rgba(20,12,2,0.75);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0.75rem;z-index:22;backdrop-filter:blur(3px);pointer-events:all;}
+
+.compass{position:fixed;bottom:24px;right:24px;width:65px;height:65px;opacity:0.55;pointer-events:none;z-index:50;animation:spin-slow 25s linear infinite;}
+@keyframes spin-slow{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+@keyframes sparkOut{0%{transform:translate(-50%,-50%) scale(0.1);opacity:1;}100%{transform:translate(-50%,-50%) scale(2.2);opacity:0;}}
+.spark-ring{position:fixed;pointer-events:none;z-index:500;width:90px;height:90px;border-radius:50%;border:3px solid #f0c830;animation:sparkOut 0.55s ease-out forwards;}
+
+/* TREASURE SCROLL MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:200;align-items:center;justify-content:center;padding:1.5rem;animation:mfadeIn 0.3s ease;}
+.modal-overlay.open{display:flex;}
+@keyframes mfadeIn{from{opacity:0;}to{opacity:1;}}
+.scroll-wrap{background:#f0e0b0;border:4px solid #7a5a10;border-radius:12px;max-width:680px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 24px 70px rgba(0,0,0,0.8),inset 0 0 40px rgba(120,80,10,0.15);animation:unfurl 0.42s cubic-bezier(0.34,1.56,0.64,1);position:relative;}
+.scroll-rod{background:#7a5a10;height:26px;position:sticky;top:0;z-index:2;border-radius:8px 8px 0 0;}
+.scroll-rod-btm{background:#7a5a10;height:26px;border-radius:0 0 8px 8px;}
+.scroll-body{padding:1.5rem 2rem 1.75rem;background:#f0e0b0;background-image:repeating-linear-gradient(0deg,rgba(120,80,10,0.06) 0,rgba(120,80,10,0.06) 1px,transparent 1px,transparent 30px);color:#1e0e00;}
+.close-btn{position:absolute;top:32px;right:14px;background:#7a5a10;color:#f0e0b0;border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background 0.2s;z-index:3;}
+.close-btn:hover{background:#4a3008;}
+.s-num{font-family:'Cinzel',serif;font-size:0.78rem;color:#8a6010;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.3rem;}
+.s-name{font-family:'Cinzel',serif;font-size:1.5rem;font-weight:700;color:#3a1e00;margin-bottom:1rem;border-bottom:2px solid rgba(120,80,10,0.35);padding-bottom:0.6rem;line-height:1.25;}
+.s-sec{font-family:'Cinzel',serif;font-size:0.72rem;color:#8a6010;letter-spacing:0.2em;text-transform:uppercase;margin-top:1rem;margin-bottom:0.4rem;display:flex;align-items:center;gap:8px;}
+.s-sec::before,.s-sec::after{content:'';flex:1;height:1px;background:rgba(120,80,10,0.3);}
+.s-def{font-size:1.05rem;line-height:1.7;color:#1e0e00;font-style:italic;}
+.s-ex{font-size:1rem;line-height:1.7;color:#2a1200;background:rgba(120,80,10,0.08);border-left:4px solid #8a6010;padding:0.75rem 1rem;border-radius:0 6px 6px 0;margin-top:0.3rem;}
+
+/* ANSWER SECTION */
+.answer-section{margin-top:1.2rem;padding:1rem;background:rgba(120,80,10,0.1);border-radius:8px;border:1px solid rgba(120,80,10,0.2);}
+.answer-prompt{font-family:'Cinzel',serif;font-size:0.8rem;color:#7a5010;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.75rem;}
+.answer-input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:0.5rem;}
+.answer-input{font-family:'Crimson Text',serif;font-size:1rem;padding:6px 10px;border:2px solid rgba(120,80,10,0.4);border-radius:5px;background:#fdf5e0;color:#2a1200;width:100px;transition:border-color 0.2s;}
+.answer-input:focus{outline:none;border-color:#8a6010;}
+.answer-input.wide{width:160px;}
+.answer-input.narrow{width:70px;}
+.answer-input.correct{border-color:#3a8a3a;background:#e8f5e8;}
+.answer-input.wrong{border-color:#c03020;background:#fde8e6;}
+.answer-bracket{font-size:1.2rem;color:#7a5010;font-weight:700;}
+.btn-check{font-family:'Cinzel',serif;font-size:0.8rem;color:#f0e0b0;background:#7a5010;border:none;padding:7px 16px;border-radius:5px;cursor:pointer;letter-spacing:0.1em;transition:background 0.2s;}
+.btn-check:hover{background:#5a3a08;}
+.answer-feedback{font-size:0.95rem;margin-top:0.5rem;padding:6px 10px;border-radius:5px;display:none;}
+.answer-feedback.show{display:block;}
+.answer-feedback.ok{background:#e8f5e8;color:#1a5a1a;border:1px solid #3a8a3a;}
+.answer-feedback.bad{background:#fde8e6;color:#8a2010;border:1px solid #c03020;}
+
+.btn-continue{font-family:'Cinzel',serif;font-size:0.9rem;font-weight:700;color:#0a1628;background:linear-gradient(135deg,#c8960c,#f0c830,#c8960c);border:none;padding:0.75rem 2.5rem;border-radius:5px;cursor:pointer;letter-spacing:0.15em;text-transform:uppercase;margin-top:1rem;display:none;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 4px 16px rgba(218,165,32,0.4);}
+.btn-continue.show{display:inline-block;}
+.btn-continue:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(218,165,32,0.6);}
+
+/* COMPLETION MODAL */
+.completion-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:500;align-items:center;justify-content:center;padding:1.5rem;}
+.completion-overlay.open{display:flex;}
+.completion-scroll{background:linear-gradient(145deg,#1a1a3a,#0a0a20);border:3px solid #DAA520;border-radius:16px;max-width:560px;width:100%;padding:3rem 2.5rem;text-align:center;box-shadow:0 0 80px rgba(218,165,32,0.4),0 24px 80px rgba(0,0,0,0.9);animation:unfurl 0.5s cubic-bezier(0.34,1.56,0.64,1);}
+.completion-trophy{font-size:5rem;margin-bottom:1rem;animation:trophySpin 2s ease-in-out infinite alternate;}
+@keyframes trophySpin{0%{transform:rotate(-5deg) scale(1);}100%{transform:rotate(5deg) scale(1.08);}}
+.completion-title{font-family:'Cinzel',serif;font-size:2rem;font-weight:900;color:#DAA520;margin-bottom:0.5rem;text-shadow:0 0 30px rgba(218,165,32,0.5);}
+.completion-sub{font-family:'Cinzel',serif;font-size:0.85rem;color:#a8c4d4;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:1.5rem;}
+.completion-note{font-size:1.1rem;color:#c9dfe8;line-height:1.8;font-style:italic;border:1px solid rgba(218,165,32,0.3);padding:1.25rem 1.5rem;border-radius:8px;background:rgba(255,255,255,0.05);margin-bottom:1.5rem;}
+.completion-btn{font-family:'Cinzel',serif;font-size:1rem;font-weight:700;color:#0a1628;background:linear-gradient(135deg,#c8960c,#f0c830,#c8960c);border:none;padding:0.85rem 2.5rem;border-radius:5px;cursor:pointer;letter-spacing:0.15em;box-shadow:0 4px 20px rgba(218,165,32,0.5);transition:transform 0.2s,box-shadow 0.2s;}
+.completion-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(218,165,32,0.7);}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- PAGE 1 LANDING -->
+<div id="page-landing">
+  <div class="stars-bg" id="stars-bg"></div>
+  <div class="anchor-icon">⚓</div>
+  <div class="main-title">Angeleans Pirate</div>
+  <div class="main-sub">Algorithm Archipelago</div>
+  <div class="tagline-box">
+    "Set sail on the digital seas to uncover the hidden logic of the ancients.<br>Master the algorithms to claim your treasure!"
+  </div>
+  <div class="crew-title">⚔ &nbsp; The Crew &nbsp; ⚔</div>
+  <div class="crew-grid">
+    <div class="crew-card" onclick="openCrewModal(0)">
+      <div class="crew-avatar">🏴‍☠️</div>
+      <div class="crew-name">Lance Ocampo</div>
+      <div class="crew-role">The Captain</div>
+    </div>
+    <div class="crew-card" onclick="openCrewModal(1)">
+      <div class="crew-avatar">🗡️</div>
+      <div class="crew-name">Juliana Kate Lacsina</div>
+      <div class="crew-role">First Mate</div>
+    </div>
+    <div class="crew-card" onclick="openCrewModal(2)">
+      <div class="crew-avatar">🧭</div>
+      <div class="crew-name">Erin Venize Timbol</div>
+      <div class="crew-role">Navigator</div>
+    </div>
+    <div class="crew-card" onclick="openCrewModal(3)">
+      <div class="crew-avatar">⚓</div>
+      <div class="crew-name">Kyle Contreras</div>
+      <div class="crew-role">Cartographer</div>
+    </div>
+  </div>
+  <button class="btn-sail" id="btn-sail" onclick="goToMap()">⚓ &nbsp; Set Sail</button>
+  <div class="waves-bottom">
+    <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,40 C150,80 350,0 600,40 C850,80 1050,0 1200,40 L1200,80 L0,80 Z" fill="rgba(20,60,100,0.4)"/>
+      <path d="M0,55 C200,20 400,70 600,50 C800,30 1000,65 1200,45 L1200,80 L0,80 Z" fill="rgba(15,45,80,0.5)"/>
+    </svg>
+  </div>
+</div>
+
+<!-- CREW MODAL -->
+<div class="crew-modal-overlay" id="crew-modal" onclick="closeCrewBg(event)">
+  <div class="crew-scroll">
+    <button class="crew-close" onclick="closeCrewModal()">✕</button>
+    <div class="crew-modal-avatar" id="cm-avatar"></div>
+    <div class="crew-modal-name" id="cm-name"></div>
+    <div class="crew-modal-role" id="cm-role"></div>
+    <hr class="crew-modal-divider">
+    <div class="crew-modal-bio" id="cm-bio"></div>
+    <div class="crew-modal-duties">
+      <ul id="cm-duties"></ul>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2 MAP -->
+<div id="page-map">
+  <div class="map-header">
+    <div class="map-title-hdr">⚓ Algorithm Archipelago</div>
+    <div class="progress-wrap">
+      <span class="progress-lbl">Treasure: <span id="opened-count">0</span>/42</span>
+      <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="btn-info" onclick="openAnswers()" title="Show all answers">i</button>
+      <button class="btn-back" onclick="goBack()">◀ Return to Port</button>
+    </div>
+  </div>
+
+  <div id="treasure-map-wrap">
+    <div id="treasure-canvas">
+      <div id="map-svg-container">
+        <svg id="main-map-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1500" preserveAspectRatio="xMidYMin meet">
+          <defs>
+            <radialGradient id="parchBg" cx="50%" cy="40%" r="70%">
+              <stop offset="0%" stop-color="#e8c870"/>
+              <stop offset="50%" stop-color="#d4a840"/>
+              <stop offset="100%" stop-color="#a07020"/>
+            </radialGradient>
+            <radialGradient id="isleGreen" cx="40%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#8aba55"/>
+              <stop offset="60%" stop-color="#5a8a30"/>
+              <stop offset="100%" stop-color="#3a6018"/>
+            </radialGradient>
+            <radialGradient id="isleDark" cx="40%" cy="30%" r="55%">
+              <stop offset="0%" stop-color="#7a9a60"/>
+              <stop offset="100%" stop-color="#3a5820"/>
+            </radialGradient>
+            <filter id="worn" x="-5%" y="-5%" width="110%" height="110%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" seed="3" result="noise"/>
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+          </defs>
+
+          <!-- Parchment -->
+          <rect width="1000" height="1500" fill="url(#parchBg)"/>
+          <ellipse cx="150" cy="200" rx="200" ry="130" fill="rgba(100,60,10,0.08)"/>
+          <ellipse cx="870" cy="1150" rx="180" ry="140" fill="rgba(80,50,5,0.07)"/>
+          <ellipse cx="500" cy="750" rx="250" ry="160" fill="rgba(120,80,20,0.05)"/>
+          <rect width="1000" height="1500" fill="none" stroke="rgba(60,30,5,0.35)" stroke-width="22" rx="8"/>
+          <rect x="6" y="6" width="988" height="1488" fill="none" stroke="rgba(80,40,8,0.2)" stroke-width="4" rx="6"/>
+          <rect x="18" y="18" width="964" height="1464" fill="none" stroke="rgba(90,55,10,0.55)" stroke-width="2.5" rx="4"/>
+          <rect x="24" y="24" width="952" height="1452" fill="none" stroke="rgba(90,55,10,0.35)" stroke-width="1" rx="3"/>
+
+          <g fill="rgba(80,50,10,0.5)" font-size="26">
+            <text x="22" y="52">✦</text><text x="954" y="52">✦</text>
+            <text x="22" y="1476">✦</text><text x="954" y="1476">✦</text>
+          </g>
+
+          <text x="500" y="72" text-anchor="middle" font-family="Cinzel,serif" font-size="28" font-weight="700" fill="rgba(60,30,5,0.85)" letter-spacing="5">ANGELEANS PIRATE</text>
+          <text x="500" y="96" text-anchor="middle" font-family="Cinzel,serif" font-size="13" fill="rgba(80,50,10,0.65)" letter-spacing="8">— ALGORITHM ARCHIPELAGO —</text>
+
+          <!-- Ocean -->
+          <rect x="30" y="110" width="940" height="1360" rx="6" fill="rgba(80,140,180,0.25)"/>
+          <ellipse cx="500" cy="750" rx="440" ry="640" fill="rgba(40,100,160,0.2)"/>
+
+          <!-- Waves -->
+          <g stroke="rgba(40,100,160,0.25)" stroke-width="1.2" fill="none">
+            <path class="wave-line" d="M40,720 Q180,700 320,720 Q460,740 600,720 Q740,700 880,720 Q950,728 960,720"/>
+            <path class="wave-line" d="M40,750 Q200,728 360,750 Q520,772 680,750 Q840,728 960,750" style="animation-delay:1s"/>
+          </g>
+          <g stroke="rgba(40,100,160,0.18)" stroke-width="0.8" fill="none">
+            <path class="wave-line" d="M40,650 Q130,638 220,650 Q310,662 400,650 Q490,638 580,650 Q670,662 760,650 Q850,638 960,648" style="animation-delay:0.5s"/>
+            <path class="wave-line" d="M40,670 Q180,658 320,670 Q460,682 600,670 Q740,658 880,668 Q930,672 960,670" style="animation-delay:1.5s"/>
+            <path class="wave-line" d="M40,810 Q120,798 200,810 Q280,822 360,810 Q440,798 520,810 Q600,822 680,810 Q760,798 840,810 Q920,822 960,812" style="animation-delay:2.5s"/>
+          </g>
+
+          <!-- Route paths -->
+          <path class="route-path" d="M200,880 Q300,830 400,800 Q500,770 600,740 Q700,710 780,670" stroke="rgba(100,60,10,0.5)" stroke-width="2.5" fill="none"/>
+          <path class="route-path" d="M150,430 Q300,380 450,350 Q550,330 630,315" stroke="rgba(100,60,10,0.3)" stroke-width="1.5" fill="none" style="animation-delay:2s"/>
+
+          <!-- Sea creatures -->
+          <text x="68" y="720" font-size="22" opacity="0.3">🐠</text>
+          <text x="880" y="800" font-size="18" opacity="0.25">🐙</text>
+          <text x="440" y="858" font-size="20" opacity="0.28">🐳</text>
+          <text x="80" y="845" font-size="16" opacity="0.2">🦈</text>
+          <text x="130" y="698" font-size="16" opacity="0.22">☠️</text>
+          <text x="840" y="720" font-size="16" opacity="0.2">☠️</text>
+
+          <!-- Compass rose -->
+          <g transform="translate(88,1380)" opacity="0.55">
+            <circle cx="0" cy="0" r="52" fill="rgba(190,140,50,0.15)" stroke="rgba(80,50,10,0.5)" stroke-width="1.5"/>
+            <circle cx="0" cy="0" r="36" fill="none" stroke="rgba(80,50,10,0.3)" stroke-width="0.8" stroke-dasharray="3 3"/>
+            <polygon points="0,-48 4,0 0,-8 -4,0" fill="rgba(80,50,10,0.7)"/>
+            <polygon points="0,48 -4,0 0,8 4,0" fill="rgba(80,50,10,0.45)"/>
+            <polygon points="-48,0 0,4 -8,0 0,-4" fill="rgba(80,50,10,0.6)"/>
+            <polygon points="48,0 0,-4 8,0 0,4" fill="rgba(80,50,10,0.45)"/>
+            <circle cx="0" cy="0" r="4" fill="rgba(80,50,10,0.7)"/>
+            <text x="0" y="-56" text-anchor="middle" font-size="10" fill="rgba(80,50,10,0.8)" font-family="Cinzel,serif" font-weight="700">N</text>
+            <text x="0" y="68" text-anchor="middle" font-size="9" fill="rgba(80,50,10,0.6)" font-family="Cinzel,serif">S</text>
+            <text x="57" y="4" text-anchor="middle" font-size="9" fill="rgba(80,50,10,0.6)" font-family="Cinzel,serif">E</text>
+            <text x="-57" y="4" text-anchor="middle" font-size="9" fill="rgba(80,50,10,0.7)" font-family="Cinzel,serif">W</text>
+          </g>
+
+          <text x="500" y="1458" text-anchor="middle" font-family="Cinzel,serif" font-size="9" fill="rgba(80,50,10,0.45)" letter-spacing="4">CHARTED BY THE CREW OF THE ANGELEAN · ANNO DOMINI</text>
+
+          <!-- Grid lines -->
+          <g opacity="0.06" stroke="rgba(80,50,10,1)" stroke-width="0.7">
+            <line x1="250" y1="110" x2="250" y2="1470"/>
+            <line x1="500" y1="110" x2="500" y2="1470"/>
+            <line x1="750" y1="110" x2="750" y2="1470"/>
+            <line x1="30" y1="360" x2="970" y2="360"/>
+            <line x1="30" y1="610" x2="970" y2="610"/>
+            <line x1="30" y1="860" x2="970" y2="860"/>
+            <line x1="30" y1="1110" x2="970" y2="1110"/>
+            <line x1="30" y1="1360" x2="970" y2="1360"/>
+          </g>
+
+          <!-- ===== MIDTERM ISLES ===== -->
+          <!-- MUCH BIGGER island spanning full width -->
+          <rect x="295" y="112" width="410" height="32" rx="4" fill="rgba(100,65,10,0.75)"/>
+          <text x="500" y="133" text-anchor="middle" font-family="Cinzel,serif" font-size="13" font-weight="700" fill="#f0d070" letter-spacing="4">✦  MIDTERM ISLES  ✦</text>
+          <text x="500" y="152" text-anchor="middle" font-family="Cinzel,serif" font-size="9" fill="rgba(80,50,10,0.7)" letter-spacing="3">ENTRY WATERS · ALGORITHMS #1–25</text>
+
+          <!-- Main island — much larger, covers more vertical space -->
+          <ellipse cx="500" cy="420" rx="440" ry="230" fill="url(#isleGreen)" filter="url(#worn)" opacity="0.92"/>
+          <ellipse cx="480" cy="415" rx="405" ry="210" fill="#6aaa40" opacity="0.5"/>
+          <!-- Coastline -->
+          <ellipse cx="500" cy="420" rx="445" ry="235" fill="none" stroke="#c8a840" stroke-width="8" opacity="0.5"/>
+          <!-- Hills -->
+          <ellipse cx="310" cy="390" rx="110" ry="75" fill="#4a8a28" opacity="0.4"/>
+          <ellipse cx="650" cy="385" rx="95" ry="65" fill="#3a7a20" opacity="0.35"/>
+          <ellipse cx="500" cy="370" rx="125" ry="80" fill="#5a9a32" opacity="0.3"/>
+          <!-- Mountains -->
+          <path d="M265,375 L305,315 L345,375Z" fill="#3a6a1e" opacity="0.6"/>
+          <path d="M275,345 L305,315 L335,345Z" fill="rgba(255,255,255,0.2)"/>
+          <path d="M600,360 L640,305 L680,360Z" fill="#305a18" opacity="0.55"/>
+          <path d="M615,328 L640,305 L665,328Z" fill="rgba(255,255,255,0.18)"/>
+          <path d="M450,355 L480,305 L510,355Z" fill="#3a6820" opacity="0.5"/>
+          <path d="M462,328 L480,305 L498,328Z" fill="rgba(255,255,255,0.15)"/>
+          <!-- Trees -->
+          <text x="160" y="430" font-size="20" opacity="0.6">🌴</text>
+          <text x="320" y="460" font-size="16" opacity="0.55">🌴</text>
+          <text x="460" y="450" font-size="18" opacity="0.5">🌿</text>
+          <text x="600" y="445" font-size="16" opacity="0.55">🌴</text>
+          <text x="740" y="430" font-size="20" opacity="0.6">🌴</text>
+          <text x="690" y="470" font-size="14" opacity="0.45">🌿</text>
+          <text x="240" y="480" font-size="14" opacity="0.45">🌿</text>
+          <text x="820" y="415" font-size="14" opacity="0.4">🌿</text>
+          <text x="100" y="410" font-size="16" opacity="0.4">🌴</text>
+          <!-- X marks -->
+          <text x="488" y="418" font-size="16" fill="rgba(80,40,5,0.4)">✕</text>
+          <text x="310" y="400" font-size="12" fill="rgba(80,40,5,0.3)">✕</text>
+          <text x="650" y="390" font-size="12" fill="rgba(80,40,5,0.3)">✕</text>
+          <!-- Offshore islets -->
+          <ellipse cx="120" cy="455" rx="55" ry="28" fill="#7aba48" opacity="0.6"/>
+          <ellipse cx="120" cy="455" rx="57" ry="30" fill="none" stroke="#c8a840" stroke-width="5" opacity="0.4"/>
+          <text x="102" y="461" font-size="14" opacity="0.5">🌴</text>
+          <ellipse cx="880" cy="440" rx="60" ry="30" fill="#7aba48" opacity="0.58"/>
+          <ellipse cx="880" cy="440" rx="62" ry="32" fill="none" stroke="#c8a840" stroke-width="5" opacity="0.4"/>
+          <text x="862" y="446" font-size="14" opacity="0.5">🌴</text>
+          <!-- River -->
+          <path d="M500,355 Q512,390 507,420" stroke="rgba(100,180,230,0.5)" stroke-width="3" fill="none"/>
+
+          <!-- ===== PERILOUS CROSSING ===== -->
+          <text x="500" y="690" text-anchor="middle" font-family="Cinzel,serif" font-size="11" fill="rgba(80,50,10,0.55)" letter-spacing="5" font-style="italic">~ ~ PERILOUS CROSSING ~ ~</text>
+          <text x="440" y="808" font-size="20" opacity="0.15">🦑</text>
+
+          <!-- ===== FINALS COAST ===== -->
+          <rect x="285" y="900" width="430" height="32" rx="4" fill="rgba(40,30,80,0.75)"/>
+          <text x="500" y="921" text-anchor="middle" font-family="Cinzel,serif" font-size="13" font-weight="700" fill="#a0c0f0" letter-spacing="4">✦  FINALS COAST  ✦</text>
+          <text x="500" y="940" text-anchor="middle" font-family="Cinzel,serif" font-size="9" fill="rgba(80,100,160,0.8)" letter-spacing="3">ADVANCED REALMS · ALGORITHMS #26–42</text>
+
+          <!-- Finals landmass — also larger -->
+          <ellipse cx="500" cy="1140" rx="430" ry="200" fill="url(#isleDark)" filter="url(#worn)" opacity="0.88"/>
+          <ellipse cx="488" cy="1135" rx="395" ry="182" fill="#507838" opacity="0.45"/>
+          <path d="M90,1100 Q200,1020 340,1065 Q450,1005 570,1040 Q670,990 790,1025 Q900,990 940,1080 Q970,1140 910,1200 Q810,1250 660,1230 Q540,1270 410,1255 Q270,1275 170,1232 Q70,1185 90,1100Z" fill="rgba(50,80,40,0.4)"/>
+          <path d="M90,1100 Q200,1020 340,1065 Q450,1005 570,1040 Q670,990 790,1025 Q900,990 940,1080 Q970,1140 910,1200 Q810,1250 660,1230 Q540,1270 410,1255 Q270,1275 170,1232 Q70,1185 90,1100Z" fill="none" stroke="#8a6830" stroke-width="6" opacity="0.45"/>
+          <!-- Mountains on finals -->
+          <path d="M290,1095 L340,1010 L390,1095Z" fill="#3a5a30" opacity="0.7"/>
+          <path d="M315,1038 L340,1010 L365,1038Z" fill="rgba(255,255,255,0.25)"/>
+          <path d="M470,1070 L530,990 L590,1070Z" fill="#2e4e28" opacity="0.65"/>
+          <path d="M500,1008 L530,988 L560,1008Z" fill="rgba(255,255,255,0.22)"/>
+          <path d="M650,1090 L705,1015 L760,1090Z" fill="#344e2a" opacity="0.68"/>
+          <path d="M678,1032 L705,1015 L732,1032Z" fill="rgba(255,255,255,0.2)"/>
+          <!-- Trees on finals -->
+          <text x="180" y="1140" font-size="16" opacity="0.5">🌲</text>
+          <text x="240" y="1165" font-size="14" opacity="0.45">🌲</text>
+          <text x="420" y="1180" font-size="16" opacity="0.5">🌿</text>
+          <text x="600" y="1175" font-size="14" opacity="0.48">🌲</text>
+          <text x="780" y="1155" font-size="16" opacity="0.5">🌲</text>
+          <text x="830" y="1180" font-size="14" opacity="0.45">🌿</text>
+          <!-- Temple -->
+          <text x="490" y="1128" font-size="18" opacity="0.35">🏛️</text>
+          <!-- X marks -->
+          <text x="340" y="1105" font-size="14" fill="rgba(80,40,5,0.35)">✕</text>
+          <text x="536" y="1065" font-size="14" fill="rgba(80,40,5,0.35)">✕</text>
+          <text x="705" y="1090" font-size="14" fill="rgba(80,40,5,0.35)">✕</text>
+          <!-- Offshore -->
+          <ellipse cx="118" cy="1162" rx="45" ry="24" fill="#607838" opacity="0.6"/>
+          <ellipse cx="882" cy="1150" rx="50" ry="26" fill="#607838" opacity="0.58"/>
+          <!-- Volcano -->
+          <path d="M810,1000 L850,940 L890,1000Z" fill="#5a3a18" opacity="0.65"/>
+          <path d="M845,945 L850,940 L855,945Z" fill="rgba(255,80,20,0.35)"/>
+          <text x="835" y="948" font-size="10" opacity="0.5">🌋</text>
+
+          <!-- HOME PORT (near Euclid's - top left of midterm isle, small area) -->
+          <ellipse cx="160" cy="340" rx="60" ry="32" fill="#b08030" opacity="0.45"/>
+          <ellipse cx="160" cy="340" rx="62" ry="34" fill="none" stroke="#7a5010" stroke-width="4" opacity="0.5"/>
+          <text x="124" y="336" font-size="14" opacity="0.7">🏰</text>
+          <text x="160" y="358" text-anchor="middle" font-family="Cinzel,serif" font-size="8" fill="rgba(80,50,10,0.7)" font-weight="700" letter-spacing="2">HOME PORT</text>
+
+          <!-- END DESTINATION (bottom of finals coast) -->
+          <ellipse cx="500" cy="1370" rx="130" ry="65" fill="rgba(80,50,180,0.25)" opacity="0.8"/>
+          <ellipse cx="500" cy="1370" rx="132" ry="67" fill="none" stroke="#6050c0" stroke-width="4" opacity="0.5"/>
+          <text x="500" y="1395" text-anchor="middle" font-family="Cinzel,serif" font-size="10" fill="rgba(60,40,150,0.75)" font-weight="700" letter-spacing="2">THE FINAL TREASURE</text>
+        </svg>
+
+        <!-- FINALS VEIL -->
+        <div class="map-lock-veil" id="finals-veil">
+          <div class="lock-icon-big">🔒</div>
+          <div class="lock-msg">Complete all 25 Midterm Treasure Spots<br>to unlock The Finals Coast</div>
+        </div>
+
+        <!-- SHIP -->
+        <div id="ship-marker" style="left:10%;top:18%">
+          <div class="ship-svg-wrap">
+            <svg width="60" height="55" viewBox="0 0 60 55" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8,32 Q15,44 30,46 Q45,44 52,32 Z" fill="#4a2808" stroke="#2a1405" stroke-width="1.5"/>
+              <path d="M10,32 Q17,42 30,44 Q43,42 50,32 Z" fill="#6a3c10"/>
+              <line x1="15" y1="33" x2="18" y2="43" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+              <line x1="30" y1="32" x2="30" y2="44" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+              <line x1="45" y1="33" x2="42" y2="43" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+              <path d="M8,32 L52,32" stroke="#3a1e08" stroke-width="2"/>
+              <line x1="30" y1="8" x2="30" y2="33" stroke="#3a2010" stroke-width="2.5"/>
+              <path d="M30,10 Q42,18 40,28 L30,30 Z" fill="#e8d8a0" stroke="rgba(80,50,10,0.4)" stroke-width="0.8"/>
+              <path d="M30,10 Q18,18 20,28 L30,30 Z" fill="#dcc890" stroke="rgba(80,50,10,0.4)" stroke-width="0.8"/>
+              <path d="M30,8 L42,4 L30,10 Z" fill="#c03020"/>
+              <line x1="30" y1="29" x2="52" y2="22" stroke="#3a2010" stroke-width="1.5"/>
+              <rect x="26" y="5" width="8" height="5" rx="1" fill="#4a2808" stroke="#2a1405" stroke-width="0.8"/>
+              <text x="30" y="54" text-anchor="middle" font-family="Cinzel,serif" font-size="5.5" fill="rgba(80,50,10,0.8)" font-weight="700">YOU ARE HERE</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- SPOTS LAYER -->
+        <div id="spots-layer"></div>
+      </div>
+    </div>
+  </div>
+
+  <svg class="compass" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="35" cy="35" r="32" fill="none" stroke="#7a5010" stroke-width="2"/>
+    <circle cx="35" cy="35" r="26" fill="rgba(180,130,40,0.1)" stroke="rgba(120,80,20,0.3)" stroke-width="0.8" stroke-dasharray="3 3"/>
+    <polygon points="35,6 38,35 35,26 32,35" fill="#8a5510"/>
+    <polygon points="35,64 32,35 35,44 38,35" fill="#6a4008"/>
+    <polygon points="6,35 35,32 26,35 35,38" fill="#8a5510"/>
+    <polygon points="64,35 35,38 44,35 35,32" fill="#6a4008"/>
+    <circle cx="35" cy="35" r="4" fill="#8a5510"/>
+    <text x="35" y="3" text-anchor="middle" font-size="7" fill="#7a5010" font-family="Cinzel,serif" font-weight="700">N</text>
+  </svg>
+</div>
+
+<!-- TREASURE SCROLL MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeBg(event)">
+  <div class="scroll-wrap">
+    <div class="scroll-rod"></div>
+    <button class="close-btn" onclick="closeModal()">✕</button>
+    <div class="scroll-body">
+      <div class="s-num" id="m-num"></div>
+      <div class="s-name" id="m-name"></div>
+      <div class="s-sec">Definition</div>
+      <div class="s-def" id="m-def"></div>
+      <div class="s-sec">Real-World Example</div>
+      <div class="s-ex" id="m-ex"></div>
+      <div class="answer-section" id="answer-section">
+        <div class="answer-prompt">Answer the Example to Continue →</div>
+        <div id="answer-inputs"></div>
+        <div class="answer-feedback" id="answer-feedback"></div>
+        <button class="btn-check" onclick="checkAnswer()">Check Answer</button>
+        <button class="btn-continue" id="btn-continue" onclick="continueNext()">Continue ⚓</button>
+      </div>
+    </div>
+    <div class="scroll-rod-btm"></div>
+  </div>
+</div>
+
+<!-- ANSWERS REFERENCE MODAL -->
+<div class="answers-overlay" id="answers-overlay" onclick="closeAnswersBg(event)">
+  <div class="answers-scroll">
+    <div class="answers-header">
+      <span class="answers-title">📋 Answer Key (Demo Reference)</span>
+      <button class="answers-close" onclick="closeAnswers()">✕</button>
+    </div>
+    <div class="answers-body" id="answers-body"></div>
+  </div>
+</div>
+
+<!-- COMPLETION MODAL -->
+<div class="completion-overlay" id="completion-overlay">
+  <div class="completion-scroll">
+    <div class="completion-trophy">🏆</div>
+    <div class="completion-title">Course Complete!</div>
+    <div class="completion-sub">Algorithms & Complexity</div>
+    <div class="completion-note">
+      "Congratulations, brave navigator! You have charted every isle, solved every puzzle, and claimed all 42 treasures of the Angelean Archipelago.<br><br>
+      You have proven mastery of <em>Algorithms and Complexity</em> — from the shores of Euclid to the final peaks of Approximation. The seas are yours to command!"
+    </div>
+    <button class="completion-btn" onclick="document.getElementById('completion-overlay').classList.remove('open')">⚓ &nbsp; Sail Home</button>
+  </div>
+</div>
+
+</div><!-- #app -->
+
+<script>
+const CREW_DATA = [
+  {
+    emoji:'🏴‍☠️', name:'Lance Ocampo', role:'The Captain',
+    bio:'The fearless leader of the Angelean expedition, Lance charts the course through treacherous algorithmic waters with courage and wisdom.',
+    duties:['Commands the crew and sets the mission strategy','Ensures every algorithm is mastered before moving forward','Makes final decisions on course corrections','Bears full responsibility for the crew\'s success']
+  },
+  {
+    emoji:'🗡️', name:'Juliana Kate Lacsina', role:'First Mate',
+    bio:'Second-in-command and the backbone of discipline aboard the ship. Juliana keeps the crew sharp and ensures no treasure is left unclaimed.',
+    duties:['Assists the Captain in all strategic decisions','Maintains crew morale and motivation','Coordinates task assignments between crew members','Keeps detailed logs of every algorithm conquered']
+  },
+  {
+    emoji:'🧭', name:'Erin Venize Timbol', role:'Navigator',
+    bio:'Erin reads the stars and the seas, guiding the ship safely through the Midterm Isles and the treacherous Perilous Crossing to the Finals Coast.',
+    duties:['Plans optimal routes between treasure locations','Interprets map coordinates and algorithm complexity','Warns the crew of difficult passages ahead','Ensures efficient traversal of the Archipelago']
+  },
+  {
+    emoji:'⚓', name:'Kyle Contreras', role:'Cartographer',
+    bio:'The mapmaker and scholar of the crew. Kyle documents every island, every algorithm, and every discovery — turning knowledge into charts that will guide future sailors.',
+    duties:['Draws and maintains the Algorithm Archipelago map','Records definitions and examples for all 42 algorithms','Marks discovered treasures and updates the crew\'s progress','Ensures the map\'s accuracy for future expeditions']
+  }
+];
+
+const ALGOS = [
+  {id:1,name:"Euclid's Algorithm",
+    def:"An iterative or recursive method for computing the Greatest Common Divisor (GCD) of two integers. It operates on the principle that the GCD of two numbers also divides their difference. By repeatedly replacing the larger number with the remainder of its division by the smaller number, the algorithm reduces the problem size logarithmically until the remainder is zero.",
+    ex:"Tile Flooring Design: A contractor is flooring a 1071 cm x 462 cm rectangular ballroom. The client demands large, uniform square tiles with absolutely no cutting or grout gaps. The contractor must find the largest possible tile size that divides both dimensions perfectly. By applying Euclid's Algorithm, they divide 1071 by 462 to find the remainder, repeating until they hit 21 cm.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Tile size (cm)',val:'21',key:'tile'},{label:'Number of tiles (total)',val:'1122',key:'count'}]}},
+
+  {id:2,name:"Consecutive Integer Check",
+    def:"A brute-force approach to finding the GCD by testing potential divisors in descending order. Starting from t equal to min(m, n), the algorithm checks if t divides both m and n with zero remainder. If not, it decrements t by 1 and repeats. While conceptually simple, its worst-case efficiency is linear, making it significantly slower than Euclid's method for large integers.",
+    ex:"Estate Distribution: An estate executor must distribute 48 vintage watches and 72 rare coins equally among heirs with nothing left over. To find the maximum number of heirs possible, the executor starts by checking if 48 works, then 47, then 46, eventually reaching the first number that divides both piles evenly.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Maximum number of heirs',val:'24',key:'heirs'},{label:'Watches per heir',val:'2',key:'watches'},{label:'Coins per heir',val:'3',key:'coins'}]}},
+
+  {id:3,name:"Prime Factorization GCD",
+    def:"A number-theoretic approach that finds the GCD by decomposing two integers into their prime factors. The GCD is then determined by taking the product of the lowest power of every common prime factor. While intuitive, this method is computationally expensive because integer factorization is a difficult problem as numbers grow large.",
+    ex:"Gear Synchronization: A clockmaker is restoring a complex astronomical clock with two interlocking gears: one with 120 teeth and another with 150. To calculate the gear ratio needed to synchronize them, the maker breaks 120 down to 2 cubed times 3 times 5, and 150 to 2 times 3 times 5 squared, then identifies the shared factors to find the GCD.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'GCD of 120 and 150',val:'30',key:'gcd'},{label:'120 divided by GCD',val:'4',key:'ratio1'},{label:'150 divided by GCD',val:'5',key:'ratio2'}]}},
+
+  {id:4,name:"Sieve of Eratosthenes",
+    def:"An ancient and highly efficient algorithm for finding all prime numbers up to a limit n. It works by creating a list of integers and systematically sieving out the multiples of each prime starting from 2. Because it avoids trial division for every single number, it is the standard method for generating prime tables.",
+    ex:"Prime Employee IDs: A cybersecurity firm assigns unique identification numbers to employees, but for encryption purposes every ID must be a prime number. Rather than testing each individual number from 1 to 10000 for primality, the IT department creates a grid and crosses out every multiple of 2, then 3, then 5, leaving a ready-made master list of valid prime IDs.",
+    mid:true,
+    answer:{type:'single',val:'1229',label:'Prime IDs available (primes up to 10000)'}},
+
+  {id:5,name:"Sequential Search",
+    def:"The most basic search algorithm, also known as Linear Search. It traverses a data structure from the first element to the last, comparing each element with the target value until a match is found or the end is reached. It requires no prior sorting and has a worst-case time complexity of O(n).",
+    ex:"Patient File Search: A small medical clinic stores 200 physical patient charts organized by date of first visit, not alphabetically. A nurse needs to find the file for John Doe. With no ordering to exploit, the nurse starts at the very first folder and checks every single name tag one by one until John Doe's folder appears.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Total charts (n)',val:'200',key:'n'},{label:'Worst-case comparisons',val:'200',key:'worst'},{label:'Best-case comparisons',val:'1',key:'best'},{label:'Average comparisons',val:'100',key:'avg'}]}},
+
+  {id:6,name:"Sequential Algorithm",
+    def:"A fundamental computational structure where instructions are executed in a strict, linear chronological order. Each step must complete before the next begins, and the flow of logic never branches or repeats. It represents the simplest form of a deterministic process where the input-to-output path is a straight line.",
+    ex:"Automated Car Wash: A car wash is programmed with a rigid controller. The vehicle must first be sprayed with soap, then scrubbed by brushes, then rinsed, and finally dried. If the system tried to dry the car before the soap was rinsed off, the process would fail. Step B cannot trigger until step A is 100 percent complete.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Total sequential steps',val:'4',key:'steps'},{label:'Step at which scrubbing occurs',val:'2',key:'scrub'},{label:'Step at which rinsing occurs',val:'3',key:'rinse'},{label:'Step at which drying occurs',val:'4',key:'dry'}]}},
+
+  {id:7,name:"Nonrecursive Max/Unique",
+    def:"An iterative approach to data analysis that uses a single loop to process a collection. To find a maximum, it maintains a current best variable, updating it whenever a larger value is encountered. By avoiding recursion, it conserves stack memory and prevents stack overflow errors in large datasets.",
+    ex:"Heaviest Package Scan: A high-speed conveyor belt at a shipping hub carries 5000 boxes. As each box passes, a program compares the box's weight to the highest recorded weight in memory. If the new box is heavier, the record is replaced. The task completes in one continuous scan.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Total boxes scanned',val:'5000',key:'scanned'},{label:'Comparisons performed',val:'4999',key:'comparisons'},{label:'Number of passes required',val:'1',key:'passes'}]}},
+
+  {id:8,name:"Recursive Factorial",
+    def:"A classic example of functional programming where a function calls itself to solve a smaller instance of the same problem. The factorial of n is defined by the base case 0 factorial equals 1 and the recursive step n times (n minus 1) factorial. Each call is added to the system call stack until the base case is reached, at which point values bubble up to produce the final product.",
+    ex:"Menu Permutations: A restaurant manager wants to know how many ways they can arrange 5 different dishes on a Daily Special rotation. They use recursive logic: to arrange 5 dishes, pick one, then multiply by the ways to arrange the remaining 4, breaking it down until one dish remains.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Total dish arrangements (5 factorial)',val:'120',key:'result'},{label:'Recursive calls made',val:'5',key:'calls'},{label:'Base case value (0 factorial)',val:'1',key:'base'}]}},
+
+  {id:9,name:"Tower of Hanoi",
+    def:"A mathematical puzzle and recursive algorithm used to demonstrate the Divide and Conquer strategy. To move n disks, the algorithm moves n minus 1 disks to an auxiliary peg, moves the largest disk to the destination, and then moves the n minus 1 disks from the auxiliary to the destination. The number of moves required grows exponentially as 2 to the power n minus 1.",
+    ex:"Backup Tape Rotation: A data center uses a Hanoi-style backup rotation across 3 tape levels to manage limited storage: yesterday's backup (small disk), last week's (medium disk), and last month's (large disk). Following Tower of Hanoi logic ensures long-term archives stay protected while recent backups rotate efficiently.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Number of tape levels (disks)',val:'3',key:'disks'},{label:'Minimum moves required',val:'7',key:'moves'},{label:'Formula result (2 to the 3 minus 1)',val:'7',key:'formula'}]}},
+
+  {id:10,name:"Exponentiation",
+    def:"The process of raising a base to a power. While basic exponentiation uses n minus 1 multiplications, the Square-and-Multiply algorithm (Binary Exponentiation) reduces this to O(log n) operations by squaring the base and only multiplying when the corresponding bit in the binary representation of the exponent is 1.",
+    ex:"Compound Interest Flash Loan: A fintech app compounds interest every second. For a one-year loan spanning 31536000 seconds, calculating interest by multiplying the rate 31536000 times would be too slow. Binary exponentiation skips through the powers and completes the same calculation in just 25 multiplications.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Seconds in one year',val:'31536000',key:'seconds'},{label:'Multiplications with binary exponentiation',val:'25',key:'mults'},{label:'Multiplications with naive method',val:'31535999',key:'naive'}]}},
+
+  {id:11,name:"Selection Sort",
+    def:"An in-place comparison sort that divides the input into a sorted and an unsorted region. It repeatedly selects the smallest element from the unsorted section and swaps it with the leftmost unsorted element. Its O(n squared) complexity makes it inefficient for large lists, but it is known for simplicity and minimal memory swap requirements.",
+    ex:"Fruit Basket Arrangement: An artisan vendor has 10 apples of different sizes. To arrange them from smallest to largest, they scan the entire pile to find the single smallest apple and place it at the front, then repeat for the remaining pile until all apples are perfectly ordered.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Number of apples (n)',val:'10',key:'n'},{label:'Total comparisons',val:'45',key:'comparisons'},{label:'Total swaps (maximum)',val:'9',key:'swaps'}]}},
+
+  {id:12,name:"Bubble Sort",
+    def:"A simple sorting algorithm that works by repeatedly stepping through the list, comparing adjacent elements and swapping them if they are in the wrong order. This pass-through is repeated until the list is sorted. The algorithm gets its name because smaller or larger elements bubble to their correct position with each iteration.",
+    ex:"Height Line-Up: A kindergarten teacher needs to line up 20 students by height for a class photo. The teacher walks down the line repeatedly, swapping any adjacent pair that is out of order. The tallest students gradually bubble toward the back until everyone is perfectly ordered.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Number of students (n)',val:'20',key:'n'},{label:'Worst-case passes',val:'19',key:'passes'},{label:'Worst-case total comparisons',val:'190',key:'comparisons'}]}},
+
+  {id:13,name:"Brute Force",
+    def:"A straightforward, exhaustive search approach that relies on sheer computing power rather than sophisticated logic. It tries every possible candidate for a solution until it finds one that satisfies the problem's constraints. It is the most reliable method but often the most inefficient, particularly for problems with a high number of combinations.",
+    ex:"Forgotten Lock Combination: You have forgotten your 3-digit gym locker combination. There are 1000 possible codes from 000 to 999. Without any clues or smart shortcuts, you try every single one starting from 000, incrementing one at a time, until the lock opens.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Total possible combinations',val:'1000',key:'total'},{label:'Combination that opens the lock',val:'742',key:'answer'},{label:'Maximum attempts needed',val:'1000',key:'worst'}]}},
+
+  {id:14,name:"Brute-Force String Matching",
+    def:"A text-searching algorithm that finds a pattern within a larger body of text by sliding the pattern across the text one character at a time. At each position it checks if the characters of the pattern match. If a mismatch occurs, it shifts the pattern exactly one position to the right and restarts the comparison.",
+    ex:"DNA Marker Search: A geneticist searches through a DNA sequence of 1000000 base pairs to find the 7-letter disease marker GATTACA. The program starts at the first letter and attempts to match one character at a time, shifting one spot right on any mismatch.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Pattern length (characters)',val:'7',key:'pattern'},{label:'Text length (base pairs)',val:'1000000',key:'text'},{label:'Worst-case total comparisons',val:'6999958',key:'comparisons'}]}},
+
+  {id:15,name:"Brute-Force Closest-Pair",
+    def:"An algorithm used to find the two points in a set that are the shortest distance apart. In the brute-force version, the algorithm calculates the Euclidean distance between every possible pair of points and keeps track of the minimum distance found. This results in an O(n squared) time complexity.",
+    ex:"Aircraft Collision Detection: An air traffic control system monitors 50 aircraft in a crowded flight corridor. To prevent mid-air collisions, the system must constantly identify which two planes are closest to each other, calculating the distance between every possible pair.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Number of aircraft (n)',val:'50',key:'n'},{label:'Total pairs checked',val:'1225',key:'pairs'},{label:'Formula: n times (n minus 1) divided by 2',val:'1225',key:'formula'}]}},
+
+  {id:16,name:"Brute-Force Convex Hull",
+    def:"A geometric algorithm that finds the outer boundary (convex hull) of a set of points. The brute-force approach tests every possible line segment formed by two points. If all other points lie on the same side of that line, the segment is part of the hull. This method has a complexity of O(n cubed).",
+    ex:"Perimeter Fence for Cows: A farmer has 50 cows tracked via GPS and wants to build a perimeter fence enclosing every cow using minimum material. Software tests every possible line between pairs of cows, keeping only those where all other cows fall on one side.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Number of cows (n)',val:'50',key:'n'},{label:'Line segments tested',val:'1225',key:'segments'},{label:'Point-side checks per segment (max)',val:'48',key:'checks'}]}},
+
+  {id:17,name:"Depth First Search",
+    def:"A graph traversal algorithm that starts at a root node and explores as far as possible along each branch before backtracking. It uses a Stack data structure to keep track of the path. It is ideal for problems involving connectivity or searching in deep trees.",
+    ex:"Escape Room Maze: You are in a maze-shaped escape room. Your strategy at every junction is to always take the leftmost door, going deeper until you hit a dead end. Only then do you backtrack to the last junction and try the next unexplored door, fully exploring each path before starting another.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Data structure used',val:'Stack',key:'ds'},{label:'Backtrack trigger',val:'Dead end',key:'backtrack'},{label:'Traversal direction',val:'Deepest branch first',key:'order'}]}},
+
+  {id:18,name:"Breadth First Search",
+    def:"A graph traversal algorithm that explores all neighbor nodes at the current level before moving on to nodes at the next level. It uses a Queue (First-In First-Out) to manage the discovery process. It is guaranteed to find the shortest path in an unweighted graph.",
+    ex:"Viral Marketing Campaign: A team sends a video link to 10 Tier-1 influencers. All 10 must share it before Tier-2 contacts are reached. If each influencer shares to 10 new people, the content spreads in concentric waves: 10 people at distance 1, then 100 at distance 2.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Data structure used',val:'Queue',key:'ds'},{label:'Tier 1 reach (people)',val:'10',key:'tier1'},{label:'Tier 2 reach (people)',val:'100',key:'tier2'},{label:'Total reached after 2 waves',val:'110',key:'total'}]}},
+
+  {id:19,name:"Insertion Sort",
+    def:"A comparison-based sorting algorithm that builds the final sorted array one item at a time. It takes each element from the unsorted part and inserts it into its correct position by shifting larger elements out of the way. It is highly efficient for small datasets or nearly-sorted data.",
+    ex:"Card Hand Sorting: A bridge player is dealt 13 cards in random order. They pick up one card at a time and slide it into the correct position among the cards already sorted in their hand, shifting others over to make room.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Number of cards (n)',val:'13',key:'n'},{label:'Worst-case total shifts',val:'78',key:'shifts'},{label:'Best-case total shifts (already sorted)',val:'0',key:'best'}]}},
+
+  {id:20,name:"Topological Sort (DFS)",
+    def:"An ordering of vertices in a Directed Acyclic Graph such that for every directed edge from u to v, vertex u comes before v. The DFS-based version records the finish times of nodes; the reverse of these finish times provides the topological order. This is essential for scheduling tasks with dependencies.",
+    ex:"Course Prerequisite Planning: A university enrollment system generates a graduation plan for a student. Some advanced courses have multiple layers of prerequisites. The system performs DFS on the course-dependency graph and produces a sequence ensuring no course is taken before its required prerequisites.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Minimum edges for a course with 3 prereqs',val:'3',key:'edges'},{label:'Valid ordering exists when cycles found',val:'0',key:'cycle'},{label:'Valid ordering exists when no cycle found',val:'1',key:'nocycle'}]}},
+
+  {id:21,name:"Topological Sort (Source-Removal)",
+    def:"An alternative topological sorting method also known as Kahn's Algorithm. It works by identifying all sources (nodes with in-degree of 0), adding them to the sorted list, and removing them from the graph. This process repeats, exposing new sources, until the graph is empty or a cycle is detected.",
+    ex:"IKEA Wardrobe Assembly: An IKEA manual shows which parts depend on others. You start by identifying all parts that need nothing else attached first (in-degree 0) like the base. Once the base is built, new parts become available. You keep picking only currently free-to-install parts until the wardrobe is complete.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Starting in-degree of first parts installed',val:'0',key:'indegree'},{label:'Minimum parts removed per round',val:'1',key:'removed'},{label:'Cycle detected: remaining nodes in queue',val:'0',key:'cycle'}]}},
+
+  {id:22,name:"Binary Search",
+    def:"An efficient search algorithm that finds the position of a target value within a sorted array. It compares the target to the middle element. If they are not equal, the half in which the target cannot lie is eliminated and the search continues on the remaining half. This reduces the search space by half every step.",
+    ex:"Dictionary Word Search: You are looking for the word Nebula in a 2000-page printed dictionary. Instead of reading every page, you open to page 1000 and see Lemon, so you know Nebula is in the second half. You repeatedly halve the remaining pages until you find the word.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Dictionary pages (n)',val:'2000',key:'n'},{label:'Steps to find the word',val:'11',key:'steps'},{label:'Search space halved each step by factor',val:'2',key:'factor'}]}},
+
+  {id:23,name:"Interpolation Search",
+    def:"An advanced search for sorted arrays with uniformly distributed values. Instead of always picking the middle, it calculates a probe position based on the target's value relative to the low and high values of the search range. In ideal cases it reaches a time complexity far better than binary search.",
+    ex:"Phonebook Search for Zachary: You are looking for Zachary in a 1000-page phonebook. Knowing Z is near the very end of the alphabet, you flip directly to around page 999 on your first try, far better than opening to the middle at page 500 as binary search would.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Phonebook pages (n)',val:'1000',key:'pages'},{label:'Binary search first probe (page number)',val:'500',key:'binary'},{label:'Interpolation first probe (page number)',val:'999',key:'interpolation'}]}},
+
+  {id:24,name:"Mergesort",
+    def:"A divide-and-conquer sorting algorithm. It recursively divides the array into two halves until each sub-array contains a single element, then merges those sub-arrays back together in sorted order. It is a stable sort with a guaranteed time complexity of O(n log n) regardless of initial data order.",
+    ex:"Library Book Sorting: A library needs to sort 10000 returned books. The head librarian splits them in half repeatedly until individual clerks have just one book each, then clerks begin merging pairs of sorted piles upward until the librarian merges the final two massive sorted stacks.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Total books (n)',val:'10000',key:'n'},{label:'Merge levels (ceiling of log base 2 of n)',val:'14',key:'levels'},{label:'Single-book sub-arrays at the bottom level',val:'10000',key:'subarrays'}]}},
+
+  {id:25,name:"Quicksort",
+    def:"A divide-and-conquer algorithm that picks an element as a pivot and partitions the array into two sub-arrays: elements less than the pivot and elements greater than the pivot. These are then sorted recursively. While its worst case is O(n squared), its average-case performance is O(n log n) with very low overhead.",
+    ex:"Exam Paper Sorting: A teacher has 100 exam papers to sort by grade. They pull a random paper with grade 75 as the pivot, throw all higher-graded papers into a right pile and lower-graded into a left pile, then have aides repeat the process recursively on each smaller pile.",
+    mid:true,
+    answer:{type:'multi',fields:[{label:'Total papers (n)',val:'100',key:'n'},{label:'Pivot value',val:'75',key:'pivot'},{label:'Papers in left pile (grade below 75)',val:'74',key:'left'},{label:'Papers in right pile (grade above 75)',val:'25',key:'right'}]}},
+
+  {id:26,name:"Heap Construction",
+    def:"The process of organizing an unorganized array into a Binary Heap, a complete binary tree that satisfies the heap property. In a Max-Heap, every parent node is greater than or equal to its children. Floyd's bottom-up approach runs in O(n) time by performing sift-down operations on all non-leaf nodes starting from the bottom of the tree.",
+    ex:"Emergency Room Triage: An ER receives 20 patients with varying injury levels. The system treats the patient list as a tree and heapifies it so the most critical case is always at the root, ready to be seen first.",
+    mid:false,
+    answer:{type:'multi',fields:[{label:'Total patients (n)',val:'20',key:'n'},{label:'Non-leaf nodes heapified',val:'10',key:'nonleaf'},{label:'Leaf nodes not processed',val:'10',key:'leaf'}]}},
+
+  {id:27,name:"Heap Root Deletion",
+    def:"A fundamental operation for priority queues. The root (maximum or minimum element) is removed, and the last element in the heap is moved to the root position. To restore the heap property, this new root is sifted down by repeatedly swapping it with its largest child until it reaches a valid position. This operation takes O(log n) time.",
+    ex:"CPU Task Scheduling: The OS removes the most urgent rendering task (the heap root) once it completes. The least urgent task is temporarily placed at the root, then sifted down until the correct new highest-priority task among the remaining 50 rises to the top.",
+    mid:false,
+    answer:{type:'multi',fields:[{label:'Tasks in heap (n)',val:'50',key:'n'},{label:'Maximum sift-down swaps needed',val:'5',key:'swaps'},{label:'Result of floor of log base 2 of 50',val:'5',key:'formula'}]}},
+
+  {id:28,name:"Heapsort",
+    def:"A comparison-based sorting algorithm that uses a Binary Heap. It first transforms the input array into a Max-Heap, then repeatedly swaps the root (the maximum value) with the last unsorted element, sifting down after each swap. It combines O(n log n) efficiency with in-place space usage.",
+    ex:"Olympic Sprinter Leaderboard: An Olympic committee sorts 100 sprinters by result. The system identifies the fastest runner for Gold, places them at the end of the sorted list, re-heaps the remaining runners, then identifies Silver, and so on, until all 100 are perfectly ranked.",
+    mid:false,
+    answer:{type:'multi',fields:[{label:'Number of sprinters (n)',val:'100',key:'n'},{label:'Approximate total comparisons',val:'1329',key:'comparisons'},{label:'Extra memory used (in-place)',val:'0',key:'memory'}]}},
+
+  {id:29,name:"Linear Programming",
+    def:"A mathematical method for achieving the best outcome in a model whose requirements are represented by linear relationships. It finds the optimal point within a feasible region defined by linear inequality constraints, typically at a corner (vertex) of that region.",
+    ex:"Bakery Production Optimization: A bakery has exactly 50 kg of flour and 20 kg of sugar. Each cake requires 2 kg of flour and 1 kg of sugar at a profit of 15 dollars. Each loaf of bread requires 1 kg of flour and 0.25 kg of sugar at a profit of 8 dollars. What production mix maximizes daily profit?",
+    mid:false,
+    answer:{type:'multi',fields:[{label:'Optimal number of cakes to bake',val:'0',key:'cakes'},{label:'Optimal number of loaves to bake',val:'50',key:'loaves'},{label:'Maximum daily profit (dollars)',val:'400',key:'profit'}]}},
+
+  {id:30,name:"Dynamic Programming (Knapsack)",
+    def:"An optimization strategy used for problems with overlapping sub-problems. For the Knapsack problem, it builds a table storing the maximum value achievable for every possible weight capacity up to the limit. By referencing previously calculated results, it avoids the exponential complexity of trying every item combination.",
+    ex:"Hiker Pack Optimization: A hiker has a 15 kg backpack and 10 items: Tent (4 kg, utility 10), Sleeping Bag (3 kg, 8), Stove (2 kg, 6), Camera (1 kg, 7), First Aid (1 kg, 9), Food (3 kg, 9), Water Filter (1 kg, 8), Rain Jacket (1 kg, 5), Headlamp (1 kg, 6), Trekking Poles (2 kg, 4). What items maximize utility without exceeding 15 kg?",
+    mid:false,
+    answer:{type:'multi',fields:[{label:'Maximum utility score',val:'62',key:'utility'},{label:'Total weight used (kg)',val:'15',key:'weight'},{label:'Number of items selected',val:'8',key:'items'}]}},
+
+  {id:31,name:"Prim's Algorithm",
+    def:"A greedy algorithm that finds a Minimum Spanning Tree for a weighted undirected graph. It starts with a single vertex and grows the tree one edge at a time by always choosing the cheapest edge connecting a vertex in the tree to a vertex outside the tree. It is typically implemented using a priority queue.",
+    ex:"Office Building Fiber Network: An IT firm connects 8 office buildings with fiber-optic cable at minimum cost. Starting at Building A, they always pick the cheapest available cable link to an unconnected building, growing the network until all 8 are linked.",
+    mid:false,
+    answer:{type:'multi',fields:[{label:'Number of buildings (vertices)',val:'8',key:'vertices'},{label:'Edges in the minimum spanning tree',val:'7',key:'edges'},{label:'Formula: vertices minus 1',val:'7',key:'formula'}]}},
+
+  {id:32,name:"Kruskal's Algorithm",
+    def:"A greedy algorithm for finding the Minimum Spanning Tree that treats every node as an individual tree and repeatedly merges them. It sorts all edges by weight and adds the smallest edge that does not create a cycle, using the Union-Find data structure to efficiently track connected components.",
+    ex:"Rail Network Construction: A rail authority wants to connect 10 cities with minimum construction cost. They sort every possible rail link cheapest-first, then add links in order, skipping any that would create a loop between already-connected cities, until all cities are in one network.",
+    mid:false,
+    answer:{type:'multi',fields:[{label:'Number of cities (vertices)',val:'10',key:'vertices'},{label:'Rail links in the final spanning tree',val:'9',key:'edges'},{label:'Formula: vertices minus 1',val:'9',key:'formula'}]}},
+
+  {id:33,name:"Dijkstra's Algorithm",
+    def:"The gold standard for finding the shortest path from a starting node to all other nodes in a graph with non-negative edge weights. It maintains tentative distances and repeatedly visits the unvisited node with the smallest distance, updating its neighbors. It effectively fans out from the source in order of total path cost.",
+    ex:"GPS Navigation: A GPS app finds the fastest route from home to a downtown stadium. Each road has a travel-time cost. The app expands outward from home, always following the path with the lowest total time so far, until it discovers the stadium via the mathematically fastest route.",
+    mid:false,
+    answer:{type:'multi',fields:[{label:'Minimum allowed edge weight',val:'0',key:'minweight'},{label:'Shortest paths computed from 1 source',val:'All nodes',key:'result'},{label:'Nodes relaxed per step',val:'1',key:'nodes'}]}},
+
+  {id:34,name:"Huffman's Algorithm",
+    def:"A greedy technique used for lossless data compression. It assigns variable-length codes to characters with shorter codes for more frequent characters by building a Huffman Tree from the bottom up. The Prefix Property ensures no code is a prefix of another, allowing unambiguous decoding.",
+    ex:"Telegraph Message Compression: An operator sends the word BANANA (B appears 1 time, A appears 3 times, N appears 2 times). Using Huffman coding, the most frequent letter A gets 1 bit, N gets 2 bits, and B gets 2 bits, minimizing total transmission length.",
+    mid:false,
+    answer:{type:'multi',fields:[{label:'Fixed-length bits needed (2 bits x 6 chars)',val:'12',key:'fixed'},{label:'Huffman-encoded total bits',val:'9',key:'huffman'},{label:'Bits saved',val:'3',key:'saved'},{label:'Compression percentage',val:'25',key:'pct'}]}},
+
+  {id:35,name:"Branch and Bound (TSP)",
+    def:"An algorithmic design paradigm for solving combinatorial optimization problems. It explores a state-space tree but uses bounds to prune branches that cannot possibly improve on the best solution already found. For the Traveling Salesperson Problem, it abandons any partial route whose cost already exceeds the current best complete route.",
+    ex:"Delivery Route Optimization: A driver must visit 15 houses. Mid-route, the driver realizes the distance traveled already exceeds a full route found earlier. Instead of completing the path, they prune it immediately and explore a different sequence, avoiding billions of unnecessary calculations.",
+    mid:false,
+    answer:{type:'multi',fields:[{label:'Number of houses',val:'15',key:'houses'},{label:'Naive routes to check (15 factorial divided by 2)',val:'653837184000',key:'naive'},{label:'Routes avoided by pruning (best case)',val:'653837183999',key:'pruned'}]}},
+
+  {id:36,name:"Karatsuba Multiplication",
+    def:"A fast multiplication algorithm using divide-and-conquer that reduces the required number of single-digit multiplications from 4 to 3 via a clever algebraic identity. This improves the time complexity from O(n squared) to O(n to the power 1.585).",
+    ex:"Encryption Key Computation: A bank's supercomputer multiplies two 1000-digit numbers for a security key. Standard long multiplication would require 1000000 individual multiplications. Karatsuba's algorithm completes the same task with roughly 56885 operations, a reduction of about 94 percent.",
+    mid:false,
+    answer:{type:'multi',fields:[{label:'Standard multiplications (1000 squared)',val:'1000000',key:'standard'},{label:'Karatsuba multiplications (1000 to power 1.585)',val:'56885',key:'karatsuba'},{label:'Reduction percentage',val:'94',key:'reduction'}]}},
+
+  {id:37,name:"Graph Connectivity Check",
+    def:"The process of verifying if there is a path between every pair of vertices in a graph. For undirected graphs, a single BFS or DFS verifies connectivity by checking if all nodes are visited. For directed graphs, strong connectivity checks ensure every node can reach every other node.",
+    ex:"Social Network Reach: A social media platform checks whether its Global News feed can reach all 500 users. They model users as nodes and follows as edges. A connectivity check reveals whether any isolated group exists who are cut off from the main network.",
+    mid:false,
+    answer:{type:'multi',fields:[{label:'Total users (nodes) checked',val:'500',key:'nodes'},{label:'Connected result (1 = yes, 0 = no)',val:'1',key:'connected'},{label:'Isolated users found if disconnected',val:'More than 0',key:'isolated'}]}},
+
+  {id:38,name:"Graph Acyclicity Check",
+    def:"An algorithm to determine if a graph contains any cycles (paths that start and end at the same node). In directed graphs, a cycle exists if DFS hits a node currently in the active recursion stack. This is vital for ensuring processes do not get stuck in infinite loops.",
+    ex:"OS Deadlock Detection: Three apps each wait on another in a circular chain: App A waits for B, B waits for C, C waits for A. The OS runs an acyclicity check on the wait-for graph. Detecting the cycle allows it to terminate one app and break the deadlock.",
+    mid:false,
+    answer:{type:'multi',fields:[{label:'Apps involved in the deadlock cycle',val:'3',key:'apps'},{label:'Cycle detected (1 = yes, 0 = no)',val:'1',key:'cycle'},{label:'Apps to terminate to break the deadlock',val:'1',key:'terminate'}]}},
+
+  {id:39,name:"Minimum Spanning Tree",
+    def:"The subset of edges in a connected edge-weighted undirected graph that connects all vertices together without any cycles and with the minimum possible total edge weight. The MST is the mathematical skeleton of the graph providing maximum connectivity at minimum cost.",
+    ex:"Water Main Design: Civil engineers design a water main system for a housing development with 50 houses. Every house needs water but pipes are expensive. The MST blueprint provides the exact pipe layout that reaches every house using the fewest total meters of pipe.",
+    mid:false,
+    answer:{type:'multi',fields:[{label:'Number of houses (vertices)',val:'50',key:'vertices'},{label:'Pipes (edges) in the MST',val:'49',key:'edges'},{label:'Formula: vertices minus 1',val:'49',key:'formula'}]}},
+
+  {id:40,name:"Shortest Paths Finding",
+    def:"A category of algorithms including Dijkstra, Bellman-Ford, and Floyd-Warshall designed to find the path with the minimum cumulative weight between nodes. Single-source algorithms find paths from one node to all others; all-pairs algorithms find the shortest distance between every possible pair of nodes.",
+    ex:"Global Logistics Routing: A shipping company moves a container from a factory in Vietnam to a warehouse in Poland across a network of 100 hubs. The system evaluates every shipping lane, rail line, and trucking route, finding the sequence of transfers with the lowest total cost.",
+    mid:false,
+    answer:{type:'multi',fields:[{label:'Total hubs in the network (n)',val:'100',key:'n'},{label:'Single-source shortest paths computed',val:'99',key:'single'},{label:'All-pairs total paths computed (n times n minus 1)',val:'9900',key:'allpairs'}]}},
+
+  {id:41,name:"Nondeterministic Algorithm",
+    def:"An algorithm that, even for the same input, can exhibit different behaviors on different runs. In theoretical computer science, it is an algorithm that can guess a solution and then verify its correctness in polynomial time. This concept is the basis for the NP (Nondeterministic Polynomial) class of problems.",
+    ex:"Billion-Cell Sudoku: A research team considers a Sudoku with 1000000000 squares. A nondeterministic algorithm would guess all correct values simultaneously in one step. The only remaining work is a single linear verification pass to confirm no row or column has duplicates.",
+    mid:false,
+    answer:{type:'multi',fields:[{label:'Sudoku cells (n)',val:'1000000000',key:'n'},{label:'Nondeterministic guess steps',val:'1',key:'guess'},{label:'Verification steps (linear scan)',val:'1000000000',key:'verify'}]}},
+
+  {id:42,name:"Approximation Algorithms",
+    def:"Algorithms used to find good enough solutions to NP-hard optimization problems. These algorithms come with a performance guarantee proving that the solution found will be within a certain factor of the true mathematical optimum, making them practical for real-world use.",
+    ex:"City-Wide Trash Collection: A city routes 200 trucks to cover every street. Finding the perfect shortest route is computationally intractable. An approximation algorithm delivers a route guaranteed to be no more than 5 percent longer than the theoretical optimum, a difference negligible in practice.",
+    mid:false,
+    answer:{type:'multi',fields:[{label:'Number of trucks',val:'200',key:'trucks'},{label:'Approximation guarantee (percent above optimal)',val:'5',key:'guarantee'},{label:'Exact optimal solution found (1 = yes, 0 = no)',val:'0',key:'exact'}]}},
+];
+
+const ICONS=['⚙️','🔢','🔩','🧮','🔍','🗺️','🔄','🔁','🗼','💥','🃏','🫧','🏴','🧬','✈️','🐄','🗝️','🌊','🃏','📐','📏','📖','📚','⚡','🏗️','⚡','🏆','📊','🎒','🌿','🔌','🌐','🧭','📡','🚚','💹','🕸️','🔗','💧','🛩️','🦠','♻️'];
+
+// MIDTERM positions — spread across the FULL larger island (x:100-900, y:245-580)
+const MID_POSITIONS=[
+  // Top arc
+  [160,278],[285,252],[415,245],[545,247],[675,258],[800,278],
+  // Upper ring
+  [100,372],[220,338],[350,322],[485,318],[615,325],[745,335],[870,358],
+  // Middle ring
+  [135,462],[265,440],[400,425],[530,420],[660,433],[790,445],[890,462],
+  // Lower ring
+  [170,548],[310,538],[450,532],[590,536],[730,542],[860,530]
+];
+
+// Finals positions — spread across wider finals island (x:130-890, y:960-1260)
+const FIN_POSITIONS=[
+  [160,1010],[280,985],[410,970],[540,968],[665,975],[785,996],[880,1030],
+  [100,1110],[235,1090],[370,1075],[510,1072],[645,1078],[780,1090],[900,1115],
+  [145,1210],[320,1218],[500,1228],[685,1220],[855,1205]
+];
+
+const opened = new Set();
+let finalsUnlocked = false;
+let currentAlgoId = null;
+let highestUnlocked = 1;
+
+function openCrewModal(idx) {
+  const c = CREW_DATA[idx];
+  document.getElementById('cm-avatar').textContent = c.emoji;
+  document.getElementById('cm-name').textContent = c.name;
+  document.getElementById('cm-role').textContent = '— ' + c.role + ' —';
+  document.getElementById('cm-bio').textContent = c.bio;
+  const ul = document.getElementById('cm-duties');
+  ul.innerHTML = c.duties.map(d=>`<li style="margin-bottom:4px">${d}</li>`).join('');
+  document.getElementById('crew-modal').classList.add('open');
+}
+function closeCrewModal(){document.getElementById('crew-modal').classList.remove('open');}
+function closeCrewBg(e){if(e.target===document.getElementById('crew-modal'))closeCrewModal();}
+
+function buildAnswersPanel(){
+  const body = document.getElementById('answers-body');
+  body.innerHTML = ALGOS.map(a=>{
+    let ans = '';
+    const av = a.answer;
+    if(av.type==='single') ans = av.val;
+    else if(av.type==='multi') ans = av.fields.map(f=>f.label+': '+f.val).join(', ');
+    else if(av.type==='array') ans = '['+av.vals.join(', ')+']';
+    else if(av.type==='sequence') ans = av.vals.join(' → ');
+    else if(av.type==='primes') ans = av.vals.join(', ');
+    else if(av.type==='hull') ans = '('+av.vals.join('), (')+')';
+    else if(av.type==='two_arrays') ans = 'Left: ['+av.left.join(', ')+'], Right: ['+av.right.join(', ')+']';
+    return `<div class="answer-row"><span class="answer-num">#${a.id}</span><span class="answer-name">${a.name}</span><span class="answer-val">${ans}</span></div>`;
+  }).join('');
+}
+function openAnswers(){buildAnswersPanel();document.getElementById('answers-overlay').classList.add('open');}
+function closeAnswers(){document.getElementById('answers-overlay').classList.remove('open');}
+function closeAnswersBg(e){if(e.target===document.getElementById('answers-overlay'))closeAnswers();}
+
+function buildAnswerInputs(a){
+  const container = document.getElementById('answer-inputs');
+  container.innerHTML = '';
+  const av = a.answer;
+  if(av.type==='single'){
+    container.innerHTML = `<div class="answer-input-row"><span style="font-size:0.9rem;color:#7a5010;">${av.label}:</span><input class="answer-input wide" id="ai_0" placeholder="Your answer" /></div>`;
+  } else if(av.type==='multi'){
+    container.innerHTML = av.fields.map((f,i)=>`<div class="answer-input-row"><span style="font-size:0.9rem;color:#7a5010;min-width:140px;">${f.label}:</span><input class="answer-input wide" id="ai_${i}" placeholder="Answer" /></div>`).join('');
+  } else if(av.type==='array'){
+    const brackets = `<span class="answer-bracket">[</span>${av.vals.map((_,i)=>`<input class="answer-input narrow" id="ai_${i}" placeholder="?" />`).join('<span style="color:#7a5010;margin:0 2px;">,</span>')}<span class="answer-bracket">]</span>`;
+    container.innerHTML = `<div class="answer-input-row">${brackets}</div>`;
+  } else if(av.type==='sequence'){
+    container.innerHTML = `<div class="answer-input-row">${av.vals.map((_,i)=>`<input class="answer-input narrow" id="ai_${i}" placeholder="?" />`).join('<span style="color:#7a5010;margin:0 3px;">→</span>')}</div>`;
+  } else if(av.type==='primes'){
+    // 5 rows of 5 textboxes
+    let html = '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
+    for(let i=0;i<av.vals.length;i++) html+=`<input class="answer-input narrow" id="ai_${i}" placeholder="?" style="width:55px;"/>`;
+    html += '</div>';
+    container.innerHTML = html;
+  } else if(av.type==='hull'){
+    container.innerHTML = `<div style="font-size:0.9rem;color:#7a5010;margin-bottom:6px;">Enter 4 hull points as x,y (order doesn't matter):</div><div class="answer-input-row">${av.vals.map((_,i)=>`<span class="answer-bracket">(</span><input class="answer-input narrow" id="ai_${i}" placeholder="x,y" style="width:70px;"/><span class="answer-bracket">)</span>`).join('')}</div>`;
+  } else if(av.type==='two_arrays'){
+    const lp = av.left.map((_,i)=>`<input class="answer-input narrow" id="aiL_${i}" placeholder="?" />`).join('<span style="color:#7a5010;margin:0 2px;">,</span>');
+    const rp = av.right.map((_,i)=>`<input class="answer-input narrow" id="aiR_${i}" placeholder="?" />`).join('<span style="color:#7a5010;margin:0 2px;">,</span>');
+    container.innerHTML = `<div class="answer-input-row"><span style="font-size:0.9rem;color:#7a5010;margin-right:6px;">Left:</span><span class="answer-bracket">[</span>${lp}<span class="answer-bracket">]</span></div><div class="answer-input-row" style="margin-top:6px;"><span style="font-size:0.9rem;color:#7a5010;margin-right:6px;">Right:</span><span class="answer-bracket">[</span>${rp}<span class="answer-bracket">]</span></div>`;
+  }
+}
+
+function normalise(s){ return String(s).trim().toLowerCase().replace(/\s+/g,''); }
+
+function checkAnswer(){
+  const a = ALGOS.find(x=>x.id===currentAlgoId);
+  if(!a) return;
+  const av = a.answer;
+  const fb = document.getElementById('answer-feedback');
+  let correct = false;
+
+  if(av.type==='single'){
+    const v = document.getElementById('ai_0').value;
+    correct = normalise(v)===normalise(av.val);
+    document.getElementById('ai_0').className = 'answer-input wide '+(correct?'correct':'wrong');
+  } else if(av.type==='multi'){
+    let allOk = true;
+    av.fields.forEach((f,i)=>{
+      const v = document.getElementById(`ai_${i}`).value;
+      const ok = normalise(v)===normalise(f.val);
+      document.getElementById(`ai_${i}`).className = 'answer-input wide '+(ok?'correct':'wrong');
+      if(!ok) allOk=false;
+    });
+    correct = allOk;
+  } else if(av.type==='array'||av.type==='sequence'){
+    let allOk = true;
+    av.vals.forEach((v,i)=>{
+      const inp = document.getElementById(`ai_${i}`);
+      const ok = normalise(inp.value)===normalise(v);
+      inp.className = 'answer-input narrow '+(ok?'correct':'wrong');
+      if(!ok) allOk=false;
+    });
+    correct = allOk;
+  } else if(av.type==='primes'){
+    // Order doesn't matter
+    const entered = av.vals.map((_,i)=>{ const el=document.getElementById(`ai_${i}`); return el?normalise(el.value):''; }).filter(Boolean);
+    const expected = av.vals.map(v=>normalise(v));
+    const ok = entered.length===expected.length && entered.every(v=>expected.includes(v)) && expected.every(v=>entered.includes(v));
+    av.vals.forEach((_,i)=>{
+      const el=document.getElementById(`ai_${i}`);
+      if(el){ const v=normalise(el.value); el.className='answer-input narrow '+(expected.includes(v)?'correct':'wrong'); }
+    });
+    correct = ok;
+  } else if(av.type==='hull'){
+    // Order doesn't matter for hull points
+    const entered = av.vals.map((_,i)=>{ const el=document.getElementById(`ai_${i}`); return el?normalise(el.value):''; });
+    const expected = av.vals.map(v=>normalise(v));
+    let allOk=true;
+    entered.forEach((v,i)=>{ const ok=expected.includes(v); document.getElementById(`ai_${i}`).className='answer-input narrow '+(ok?'correct':'wrong'); if(!ok)allOk=false; });
+    correct = allOk;
+  } else if(av.type==='two_arrays'){
+    let allOk=true;
+    av.left.forEach((v,i)=>{ const el=document.getElementById(`aiL_${i}`); if(!el) return; const ok=normalise(el.value)===normalise(v); el.className='answer-input narrow '+(ok?'correct':'wrong'); if(!ok)allOk=false; });
+    av.right.forEach((v,i)=>{ const el=document.getElementById(`aiR_${i}`); if(!el) return; const ok=normalise(el.value)===normalise(v); el.className='answer-input narrow '+(ok?'correct':'wrong'); if(!ok)allOk=false; });
+    correct = allOk;
+  }
+
+  if(correct){
+    fb.textContent = '✅ Correct! Click Continue to proceed to the next algorithm.';
+    fb.className='answer-feedback show ok';
+    document.getElementById('btn-continue').className='btn-continue show';
+    // Mark the specific algo's highest unlock
+    if(a.id >= highestUnlocked) highestUnlocked = a.id+1;
+  } else {
+    fb.textContent = '❌ Not quite. Check your answers and try again!';
+    fb.className='answer-feedback show bad';
+    document.getElementById('btn-continue').className='btn-continue';
+  }
+}
+
+function continueNext(){
+  const a = ALGOS.find(x=>x.id===currentAlgoId);
+  opened.add(a.id);
+  updateProgress(); buildSpots(); checkUnlock();
+  closeModal();
+
+  // Move ship to the next unlocked spot
+  const nextId = a.id + 1;
+  if(nextId <= 42){
+    const nextAlgo = ALGOS.find(x=>x.id===nextId);
+    if(nextAlgo){
+      const isMid = nextAlgo.mid;
+      const allMidPositions = MID_POSITIONS;
+      const allFinPositions = FIN_POSITIONS;
+      let raw;
+      if(isMid){
+        const midAlgos = ALGOS.filter(x=>x.mid);
+        const idx = midAlgos.findIndex(x=>x.id===nextId);
+        raw = allMidPositions[idx];
+      } else {
+        const finAlgos = ALGOS.filter(x=>!x.mid);
+        const idx = finAlgos.findIndex(x=>x.id===nextId);
+        raw = allFinPositions[idx];
+      }
+      if(raw){
+        const pos = svgToPixel(raw[0], raw[1]);
+        moveShipTo(pos.x, pos.y);
+      }
+    }
+  } else {
+    // All 42 done — move ship to final treasure
+    const pos = svgToPixel(500, 1370);
+    moveShipTo(pos.x, pos.y);
+    setTimeout(()=>{ document.getElementById('completion-overlay').classList.add('open'); }, 800);
+  }
+}
+
+function svgToPixel(svgX, svgY){
+  const svg = document.getElementById('main-map-svg');
+  const rect = svg.getBoundingClientRect();
+  const svgW=1000,svgH=1500;
+  const scale = Math.min(rect.width/svgW, rect.height/svgH);
+  const renderedW = svgW*scale;
+  const offsetX = (rect.width - renderedW)/2;
+  return { x: (offsetX + svgX*scale).toFixed(2), y: (svgY*scale).toFixed(2) };
+}
+
+function buildSpots(){
+  const layer = document.getElementById('spots-layer');
+  layer.innerHTML='';
+  const svg = document.getElementById('main-map-svg');
+  const rect = svg.getBoundingClientRect();
+  const scale = Math.min(rect.width/1000, rect.height/1500);
+  const renderedW = 1000*scale;
+  const renderedH = 1500*scale;
+  const offsetX = (rect.width-renderedW)/2;
+  layer.style.width = rect.width+'px';
+  layer.style.height = renderedH+'px';
+
+  const midAlgos = ALGOS.filter(a=>a.mid);
+  const finAlgos = ALGOS.filter(a=>!a.mid);
+
+  midAlgos.forEach((a,i)=>{
+    const raw = MID_POSITIONS[i]||[500,380];
+    const pos = svgToPixel(raw[0],raw[1]);
+    const isLocked = a.id > highestUnlocked;
+    createSpot(layer,a,pos.x,pos.y,isLocked);
+  });
+
+  finAlgos.forEach((a,i)=>{
+    const raw = FIN_POSITIONS[i]||[500,1050];
+    const pos = svgToPixel(raw[0],raw[1]);
+    const isLocked = !finalsUnlocked || a.id > highestUnlocked;
+    createSpot(layer,a,pos.x,pos.y,isLocked);
+  });
+
+  // End port / final treasure (SVG 500,1370)
+  const endPos = svgToPixel(500,1370);
+  const endEl = document.createElement('div');
+  const allDone = ALGOS.every(a=>opened.has(a.id));
+  endEl.className='end-port-spot'+(allDone?' unlocked-end':'');
+  endEl.style.left = endPos.x+'px';
+  endEl.style.top = endPos.y+'px';
+  endEl.innerHTML=`<div class="end-port-chest">${allDone?'🏆':'🔐'}</div><div class="end-port-label">${allDone?'Final Treasure!':'Complete All 42'}</div>`;
+  if(allDone){
+    endEl.style.cursor='pointer';
+    endEl.onclick=()=>document.getElementById('completion-overlay').classList.add('open');
+  }
+  layer.appendChild(endEl);
+}
+
+function createSpot(layer,a,xPx,yPx,locked){
+  const el = document.createElement('div');
+  el.className='t-spot'+(opened.has(a.id)?' found':'')+(locked?' locked-spot':'');
+  el.style.left=xPx+'px';
+  el.style.top=yPx+'px';
+  el.setAttribute('data-id',a.id);
+  el.setAttribute('title',a.name);
+  const icon=ICONS[(a.id-1)%ICONS.length];
+  el.innerHTML=`<div class="t-chest">${opened.has(a.id)?'✅':icon}</div><div class="t-spot-num">#${a.id}</div><div class="t-spot-label">${a.name}</div>`;
+  if(!locked){
+    el.onclick=(ev)=>openTreasure(a.id,ev,xPx,yPx);
+  }
+  layer.appendChild(el);
+}
+
+function updateProgress(){
+  const pct=(opened.size/42)*100;
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('opened-count').textContent=opened.size;
+}
+
+function checkUnlock(){
+  const midAlgos=ALGOS.filter(a=>a.mid);
+  if(midAlgos.every(a=>opened.has(a.id))&&!finalsUnlocked){
+    finalsUnlocked=true;
+    highestUnlocked=26;
+    const veil=document.getElementById('finals-veil');
+    veil.style.transition='opacity 0.8s ease';
+    veil.style.opacity='0';
+    setTimeout(()=>veil.style.display='none',850);
+    buildSpots();
+  }
+}
+
+function spawnSpark(x,y){
+  const s=document.createElement('div');
+  s.className='spark-ring';
+  s.style.left=x+'px';s.style.top=y+'px';
+  document.body.appendChild(s);
+  setTimeout(()=>s.remove(),600);
+}
+
+function moveShipTo(xPx,yPx){
+  const ship=document.getElementById('ship-marker');
+  ship.style.left=xPx+'px';
+  ship.style.top=(parseFloat(yPx)-20)+'px';
+}
+
+function openTreasure(id,ev,xPx,yPx){
+  // Enforce step-by-step: only allow opening if id <= highestUnlocked
+  if(id > highestUnlocked){ return; }
+  const a=ALGOS.find(x=>x.id===id);
+  if(!a) return;
+
+  if(ev){
+    const r=ev.currentTarget.getBoundingClientRect();
+    spawnSpark(r.left+r.width/2,r.top+r.height/2+window.scrollY);
+  }
+  if(xPx!==undefined&&xPx!==null) moveShipTo(xPx,yPx);
+
+  currentAlgoId=id;
+  document.getElementById('m-num').textContent=`Treasure #${a.id} of 42`;
+  document.getElementById('m-name').textContent=a.name;
+  document.getElementById('m-def').textContent=a.def;
+  document.getElementById('m-ex').textContent=a.ex;
+
+  // Reset answer area
+  document.getElementById('answer-feedback').className='answer-feedback';
+  document.getElementById('btn-continue').className='btn-continue';
+  buildAnswerInputs(a);
+
+  // If already opened, allow continue immediately
+  if(opened.has(id)){
+    document.getElementById('answer-feedback').textContent='✅ Already completed! Click Continue to proceed.';
+    document.getElementById('answer-feedback').className='answer-feedback show ok';
+    document.getElementById('btn-continue').className='btn-continue show';
+  }
+
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  currentAlgoId=null;
+}
+function closeBg(e){if(e.target===document.getElementById('modal'))closeModal();}
+
+function goToMap(){
+  const l=document.getElementById('page-landing');
+  const m=document.getElementById('page-map');
+  l.style.opacity='0';l.style.transform='scale(1.18)';
+  setTimeout(()=>{
+    l.style.display='none';
+    m.style.display='block';
+    m.style.opacity='0';
+    requestAnimationFrame(()=>{
+      m.style.transition='opacity 0.6s ease';m.style.opacity='1';
+      if(!finalsUnlocked){
+        const veil=document.getElementById('finals-veil');
+        veil.style.display='flex';veil.style.opacity='1';
+      }
+      requestAnimationFrame(()=>initSpots());
+    });
+  },800);
+}
+
+function goBack(){
+  const l=document.getElementById('page-landing');
+  const m=document.getElementById('page-map');
+  m.style.transition='opacity 0.5s ease';m.style.opacity='0';
+  setTimeout(()=>{
+    m.style.display='none';
+    l.style.cssText='display:flex;opacity:0;transform:scale(1.1);transition:opacity 0.6s ease,transform 0.6s ease;';
+    requestAnimationFrame(()=>{l.style.opacity='1';l.style.transform='scale(1)';});
+  },500);
+}
+
+function initSpots(){
+  const svg=document.getElementById('main-map-svg');
+  const rect=svg.getBoundingClientRect();
+  const scale=Math.min(rect.width/1000,rect.height/1500);
+  const offsetX=(rect.width-1000*scale)/2;
+  const ship=document.getElementById('ship-marker');
+  // Start at Euclid's Algorithm position (SVG 160, 278)
+  ship.style.left=(offsetX+160*scale)+'px';
+  ship.style.top=(278*scale-20)+'px';
+
+  const veil=document.getElementById('finals-veil');
+  const veilTop=900*scale;
+  veil.style.top=veilTop+'px';
+  veil.style.height=(1500*scale-veilTop)+'px';
+  buildSpots();
+}
+
+function buildStars(){
+  const container=document.getElementById('stars-bg');
+  if(!container) return;
+  for(let i=0;i<120;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    const size=Math.random()*2.5+0.5;
+    s.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*3}s;animation-duration:${1.5+Math.random()*2.5}s;opacity:${0.3+Math.random()*0.7};`;
+    container.appendChild(s);
+  }
+}
+buildStars();
+
+window.addEventListener('resize',()=>{
+  if(document.getElementById('page-map').style.display!=='none') initSpots();
+});
+</script>
+</body>
+</html>
