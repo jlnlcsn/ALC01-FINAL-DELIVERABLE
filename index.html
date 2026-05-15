@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Angeleans Pirate — Algorithm Archipelago</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE 1 — LANDING
+  ═══════════════════════════════════════════════ -->
+  <div id="page-landing">
+    <div class="stars-bg" id="stars-bg"></div>
+
+    <div class="anchor-icon">⚓</div>
+    <div class="main-title">Angeleans Pirate</div>
+    <div class="main-sub">Algorithm Archipelago</div>
+
+    <div class="tagline-box">
+      "Set sail on the digital seas to uncover the hidden logic of the ancients.<br>
+      Master the algorithms to claim your treasure!"
+    </div>
+
+    <div class="crew-title">⚔ &nbsp; The Crew &nbsp; ⚔</div>
+    <div class="crew-grid">
+      <div class="crew-card" onclick="openCrewModal(0)">
+        <div class="crew-avatar">🏴‍☠️</div>
+        <div class="crew-name">Lance Ocampo</div>
+        <div class="crew-role">The Captain</div>
+      </div>
+      <div class="crew-card" onclick="openCrewModal(1)">
+        <div class="crew-avatar">🗡️</div>
+        <div class="crew-name">Juliana Kate Lacsina</div>
+        <div class="crew-role">First Mate</div>
+      </div>
+      <div class="crew-card" onclick="openCrewModal(2)">
+        <div class="crew-avatar">🧭</div>
+        <div class="crew-name">Erin Venize Timbol</div>
+        <div class="crew-role">Navigator</div>
+      </div>
+      <div class="crew-card" onclick="openCrewModal(3)">
+        <div class="crew-avatar">⚓</div>
+        <div class="crew-name">Kyle Contreras</div>
+        <div class="crew-role">Cartographer</div>
+      </div>
+    </div>
+
+    <button class="btn-sail" id="btn-sail" onclick="goToMap()">⚓ &nbsp; Set Sail</button>
+
+    <div class="waves-bottom">
+      <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C150,80 350,0 600,40 C850,80 1050,0 1200,40 L1200,80 L0,80 Z" fill="rgba(20,60,100,0.4)"/>
+        <path d="M0,55 C200,20 400,70 600,50 C800,30 1000,65 1200,45 L1200,80 L0,80 Z" fill="rgba(15,45,80,0.5)"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       CREW MODAL
+  ═══════════════════════════════════════════════ -->
+  <div class="crew-modal-overlay" id="crew-modal" onclick="closeCrewBg(event)">
+    <div class="crew-scroll">
+      <button class="crew-close" onclick="closeCrewModal()">✕</button>
+      <div class="crew-modal-avatar" id="cm-avatar"></div>
+      <div class="crew-modal-name" id="cm-name"></div>
+      <div class="crew-modal-role" id="cm-role"></div>
+      <hr class="crew-modal-divider">
+      <div class="crew-modal-bio" id="cm-bio"></div>
+      <div class="crew-modal-duties">
+        <ul id="cm-duties"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE 2 — MAP
+  ═══════════════════════════════════════════════ -->
+  <div id="page-map">
+
+    <div class="map-header">
+      <div class="map-title-hdr">⚓ Algorithm Archipelago</div>
+      <div class="progress-wrap">
+        <span class="progress-lbl">Treasure: <span id="opened-count">0</span>/42</span>
+        <div class="progress-track">
+          <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button class="btn-info" onclick="openAnswers()" title="Show all answers">i</button>
+        <button class="btn-back" onclick="goBack()">◀ Return to Port</button>
+      </div>
+    </div>
+
+    <div id="treasure-map-wrap">
+      <div id="treasure-canvas">
+        <div id="map-svg-container">
+
+          <svg id="main-map-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1500" preserveAspectRatio="xMidYMin meet">
+            <defs>
+              <radialGradient id="parchBg" cx="50%" cy="40%" r="70%">
+                <stop offset="0%" stop-color="#e8c870"/>
+                <stop offset="50%" stop-color="#d4a840"/>
+                <stop offset="100%" stop-color="#a07020"/>
+              </radialGradient>
+              <radialGradient id="isleGreen" cx="40%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#8aba55"/>
+                <stop offset="60%" stop-color="#5a8a30"/>
+                <stop offset="100%" stop-color="#3a6018"/>
+              </radialGradient>
+              <radialGradient id="isleDark" cx="40%" cy="30%" r="55%">
+                <stop offset="0%" stop-color="#7a9a60"/>
+                <stop offset="100%" stop-color="#3a5820"/>
+              </radialGradient>
+              <filter id="worn" x="-5%" y="-5%" width="110%" height="110%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" seed="3" result="noise"/>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+              </filter>
+            </defs>
+
+            <!-- Parchment background -->
+            <rect width="1000" height="1500" fill="url(#parchBg)"/>
+            <ellipse cx="150" cy="200" rx="200" ry="130" fill="rgba(100,60,10,0.08)"/>
+            <ellipse cx="870" cy="1150" rx="180" ry="140" fill="rgba(80,50,5,0.07)"/>
+            <ellipse cx="500" cy="750" rx="250" ry="160" fill="rgba(120,80,20,0.05)"/>
+            <rect width="1000" height="1500" fill="none" stroke="rgba(60,30,5,0.35)" stroke-width="22" rx="8"/>
+            <rect x="6" y="6" width="988" height="1488" fill="none" stroke="rgba(80,40,8,0.2)" stroke-width="4" rx="6"/>
+            <rect x="18" y="18" width="964" height="1464" fill="none" stroke="rgba(90,55,10,0.55)" stroke-width="2.5" rx="4"/>
+            <rect x="24" y="24" width="952" height="1452" fill="none" stroke="rgba(90,55,10,0.35)" stroke-width="1" rx="3"/>
+
+            <g fill="rgba(80,50,10,0.5)" font-size="26">
+              <text x="22" y="52">✦</text><text x="954" y="52">✦</text>
+              <text x="22" y="1476">✦</text><text x="954" y="1476">✦</text>
+            </g>
+
+            <text x="500" y="72" text-anchor="middle" font-family="Cinzel,serif" font-size="28" font-weight="700" fill="rgba(60,30,5,0.85)" letter-spacing="5">ANGELEANS PIRATE</text>
+            <text x="500" y="96" text-anchor="middle" font-family="Cinzel,serif" font-size="13" fill="rgba(80,50,10,0.65)" letter-spacing="8">— ALGORITHM ARCHIPELAGO —</text>
+
+            <!-- Ocean -->
+            <rect x="30" y="110" width="940" height="1360" rx="6" fill="rgba(80,140,180,0.25)"/>
+            <ellipse cx="500" cy="750" rx="440" ry="640" fill="rgba(40,100,160,0.2)"/>
+
+            <!-- Waves -->
+            <g stroke="rgba(40,100,160,0.25)" stroke-width="1.2" fill="none">
+              <path class="wave-line" d="M40,720 Q180,700 320,720 Q460,740 600,720 Q740,700 880,720 Q950,728 960,720"/>
+              <path class="wave-line" d="M40,750 Q200,728 360,750 Q520,772 680,750 Q840,728 960,750" style="animation-delay:1s"/>
+            </g>
+            <g stroke="rgba(40,100,160,0.18)" stroke-width="0.8" fill="none">
+              <path class="wave-line" d="M40,650 Q130,638 220,650 Q310,662 400,650 Q490,638 580,650 Q670,662 760,650 Q850,638 960,648" style="animation-delay:0.5s"/>
+              <path class="wave-line" d="M40,670 Q180,658 320,670 Q460,682 600,670 Q740,658 880,668 Q930,672 960,670" style="animation-delay:1.5s"/>
+              <path class="wave-line" d="M40,810 Q120,798 200,810 Q280,822 360,810 Q440,798 520,810 Q600,822 680,810 Q760,798 840,810 Q920,822 960,812" style="animation-delay:2.5s"/>
+            </g>
+
+            <!-- Route paths -->
+            <path class="route-path" d="M200,880 Q300,830 400,800 Q500,770 600,740 Q700,710 780,670" stroke="rgba(100,60,10,0.5)" stroke-width="2.5" fill="none"/>
+            <path class="route-path" d="M150,430 Q300,380 450,350 Q550,330 630,315" stroke="rgba(100,60,10,0.3)" stroke-width="1.5" fill="none" style="animation-delay:2s"/>
+
+            <!-- Sea creatures -->
+            <text x="68" y="720" font-size="22" opacity="0.3">🐠</text>
+            <text x="880" y="800" font-size="18" opacity="0.25">🐙</text>
+            <text x="440" y="858" font-size="20" opacity="0.28">🐳</text>
+            <text x="80" y="845" font-size="16" opacity="0.2">🦈</text>
+            <text x="130" y="698" font-size="16" opacity="0.22">☠️</text>
+            <text x="840" y="720" font-size="16" opacity="0.2">☠️</text>
+
+            <!-- Compass rose -->
+            <g transform="translate(88,1380)" opacity="0.55">
+              <circle cx="0" cy="0" r="52" fill="rgba(190,140,50,0.15)" stroke="rgba(80,50,10,0.5)" stroke-width="1.5"/>
+              <circle cx="0" cy="0" r="36" fill="none" stroke="rgba(80,50,10,0.3)" stroke-width="0.8" stroke-dasharray="3 3"/>
+              <polygon points="0,-48 4,0 0,-8 -4,0" fill="rgba(80,50,10,0.7)"/>
+              <polygon points="0,48 -4,0 0,8 4,0" fill="rgba(80,50,10,0.45)"/>
+              <polygon points="-48,0 0,4 -8,0 0,-4" fill="rgba(80,50,10,0.6)"/>
+              <polygon points="48,0 0,-4 8,0 0,4" fill="rgba(80,50,10,0.45)"/>
+              <circle cx="0" cy="0" r="4" fill="rgba(80,50,10,0.7)"/>
+              <text x="0" y="-56" text-anchor="middle" font-size="10" fill="rgba(80,50,10,0.8)" font-family="Cinzel,serif" font-weight="700">N</text>
+              <text x="0" y="68" text-anchor="middle" font-size="9" fill="rgba(80,50,10,0.6)" font-family="Cinzel,serif">S</text>
+              <text x="57" y="4" text-anchor="middle" font-size="9" fill="rgba(80,50,10,0.6)" font-family="Cinzel,serif">E</text>
+              <text x="-57" y="4" text-anchor="middle" font-size="9" fill="rgba(80,50,10,0.7)" font-family="Cinzel,serif">W</text>
+            </g>
+
+            <text x="500" y="1458" text-anchor="middle" font-family="Cinzel,serif" font-size="9" fill="rgba(80,50,10,0.45)" letter-spacing="4">CHARTED BY THE CREW OF THE ANGELEAN · ANNO DOMINI</text>
+
+            <!-- Grid lines -->
+            <g opacity="0.06" stroke="rgba(80,50,10,1)" stroke-width="0.7">
+              <line x1="250" y1="110" x2="250" y2="1470"/>
+              <line x1="500" y1="110" x2="500" y2="1470"/>
+              <line x1="750" y1="110" x2="750" y2="1470"/>
+              <line x1="30" y1="360" x2="970" y2="360"/>
+              <line x1="30" y1="610" x2="970" y2="610"/>
+              <line x1="30" y1="860" x2="970" y2="860"/>
+              <line x1="30" y1="1110" x2="970" y2="1110"/>
+              <line x1="30" y1="1360" x2="970" y2="1360"/>
+            </g>
+
+            <!-- MIDTERM ISLES banner -->
+            <rect x="295" y="112" width="410" height="32" rx="4" fill="rgba(100,65,10,0.75)"/>
+            <text x="500" y="133" text-anchor="middle" font-family="Cinzel,serif" font-size="13" font-weight="700" fill="#f0d070" letter-spacing="4">✦  MIDTERM ISLES  ✦</text>
+            <text x="500" y="152" text-anchor="middle" font-family="Cinzel,serif" font-size="9" fill="rgba(80,50,10,0.7)" letter-spacing="3">ENTRY WATERS · ALGORITHMS #1–25</text>
+
+            <!-- Main midterm island -->
+            <ellipse cx="500" cy="420" rx="440" ry="230" fill="url(#isleGreen)" filter="url(#worn)" opacity="0.92"/>
+            <ellipse cx="480" cy="415" rx="405" ry="210" fill="#6aaa40" opacity="0.5"/>
+            <ellipse cx="500" cy="420" rx="445" ry="235" fill="none" stroke="#c8a840" stroke-width="8" opacity="0.5"/>
+            <ellipse cx="310" cy="390" rx="110" ry="75" fill="#4a8a28" opacity="0.4"/>
+            <ellipse cx="650" cy="385" rx="95" ry="65" fill="#3a7a20" opacity="0.35"/>
+            <ellipse cx="500" cy="370" rx="125" ry="80" fill="#5a9a32" opacity="0.3"/>
+            <path d="M265,375 L305,315 L345,375Z" fill="#3a6a1e" opacity="0.6"/>
+            <path d="M275,345 L305,315 L335,345Z" fill="rgba(255,255,255,0.2)"/>
+            <path d="M600,360 L640,305 L680,360Z" fill="#305a18" opacity="0.55"/>
+            <path d="M615,328 L640,305 L665,328Z" fill="rgba(255,255,255,0.18)"/>
+            <path d="M450,355 L480,305 L510,355Z" fill="#3a6820" opacity="0.5"/>
+            <path d="M462,328 L480,305 L498,328Z" fill="rgba(255,255,255,0.15)"/>
+            <text x="160" y="430" font-size="20" opacity="0.6">🌴</text>
+            <text x="320" y="460" font-size="16" opacity="0.55">🌴</text>
+            <text x="460" y="450" font-size="18" opacity="0.5">🌿</text>
+            <text x="600" y="445" font-size="16" opacity="0.55">🌴</text>
+            <text x="740" y="430" font-size="20" opacity="0.6">🌴</text>
+            <text x="690" y="470" font-size="14" opacity="0.45">🌿</text>
+            <text x="240" y="480" font-size="14" opacity="0.45">🌿</text>
+            <text x="820" y="415" font-size="14" opacity="0.4">🌿</text>
+            <text x="100" y="410" font-size="16" opacity="0.4">🌴</text>
+            <text x="488" y="418" font-size="16" fill="rgba(80,40,5,0.4)">✕</text>
+            <text x="310" y="400" font-size="12" fill="rgba(80,40,5,0.3)">✕</text>
+            <text x="650" y="390" font-size="12" fill="rgba(80,40,5,0.3)">✕</text>
+            <ellipse cx="120" cy="455" rx="55" ry="28" fill="#7aba48" opacity="0.6"/>
+            <ellipse cx="120" cy="455" rx="57" ry="30" fill="none" stroke="#c8a840" stroke-width="5" opacity="0.4"/>
+            <text x="102" y="461" font-size="14" opacity="0.5">🌴</text>
+            <ellipse cx="880" cy="440" rx="60" ry="30" fill="#7aba48" opacity="0.58"/>
+            <ellipse cx="880" cy="440" rx="62" ry="32" fill="none" stroke="#c8a840" stroke-width="5" opacity="0.4"/>
+            <text x="862" y="446" font-size="14" opacity="0.5">🌴</text>
+            <path d="M500,355 Q512,390 507,420" stroke="rgba(100,180,230,0.5)" stroke-width="3" fill="none"/>
+
+            <!-- Perilous Crossing -->
+            <text x="500" y="690" text-anchor="middle" font-family="Cinzel,serif" font-size="11" fill="rgba(80,50,10,0.55)" letter-spacing="5" font-style="italic">~ ~ PERILOUS CROSSING ~ ~</text>
+            <text x="440" y="808" font-size="20" opacity="0.15">🦑</text>
+
+            <!-- FINALS COAST banner -->
+            <rect x="285" y="900" width="430" height="32" rx="4" fill="rgba(40,30,80,0.75)"/>
+            <text x="500" y="921" text-anchor="middle" font-family="Cinzel,serif" font-size="13" font-weight="700" fill="#a0c0f0" letter-spacing="4">✦  FINALS COAST  ✦</text>
+            <text x="500" y="940" text-anchor="middle" font-family="Cinzel,serif" font-size="9" fill="rgba(80,100,160,0.8)" letter-spacing="3">ADVANCED REALMS · ALGORITHMS #26–42</text>
+
+            <!-- Finals landmass -->
+            <ellipse cx="500" cy="1140" rx="430" ry="200" fill="url(#isleDark)" filter="url(#worn)" opacity="0.88"/>
+            <ellipse cx="488" cy="1135" rx="395" ry="182" fill="#507838" opacity="0.45"/>
+            <path d="M90,1100 Q200,1020 340,1065 Q450,1005 570,1040 Q670,990 790,1025 Q900,990 940,1080 Q970,1140 910,1200 Q810,1250 660,1230 Q540,1270 410,1255 Q270,1275 170,1232 Q70,1185 90,1100Z" fill="rgba(50,80,40,0.4)"/>
+            <path d="M90,1100 Q200,1020 340,1065 Q450,1005 570,1040 Q670,990 790,1025 Q900,990 940,1080 Q970,1140 910,1200 Q810,1250 660,1230 Q540,1270 410,1255 Q270,1275 170,1232 Q70,1185 90,1100Z" fill="none" stroke="#8a6830" stroke-width="6" opacity="0.45"/>
+            <path d="M290,1095 L340,1010 L390,1095Z" fill="#3a5a30" opacity="0.7"/>
+            <path d="M315,1038 L340,1010 L365,1038Z" fill="rgba(255,255,255,0.25)"/>
+            <path d="M470,1070 L530,990 L590,1070Z" fill="#2e4e28" opacity="0.65"/>
+            <path d="M500,1008 L530,988 L560,1008Z" fill="rgba(255,255,255,0.22)"/>
+            <path d="M650,1090 L705,1015 L760,1090Z" fill="#344e2a" opacity="0.68"/>
+            <path d="M678,1032 L705,1015 L732,1032Z" fill="rgba(255,255,255,0.2)"/>
+            <text x="180" y="1140" font-size="16" opacity="0.5">🌲</text>
+            <text x="240" y="1165" font-size="14" opacity="0.45">🌲</text>
+            <text x="420" y="1180" font-size="16" opacity="0.5">🌿</text>
+            <text x="600" y="1175" font-size="14" opacity="0.48">🌲</text>
+            <text x="780" y="1155" font-size="16" opacity="0.5">🌲</text>
+            <text x="830" y="1180" font-size="14" opacity="0.45">🌿</text>
+            <text x="490" y="1128" font-size="18" opacity="0.35">🏛️</text>
+            <text x="340" y="1105" font-size="14" fill="rgba(80,40,5,0.35)">✕</text>
+            <text x="536" y="1065" font-size="14" fill="rgba(80,40,5,0.35)">✕</text>
+            <text x="705" y="1090" font-size="14" fill="rgba(80,40,5,0.35)">✕</text>
+            <ellipse cx="118" cy="1162" rx="45" ry="24" fill="#607838" opacity="0.6"/>
+            <ellipse cx="882" cy="1150" rx="50" ry="26" fill="#607838" opacity="0.58"/>
+            <path d="M810,1000 L850,940 L890,1000Z" fill="#5a3a18" opacity="0.65"/>
+            <path d="M845,945 L850,940 L855,945Z" fill="rgba(255,80,20,0.35)"/>
+            <text x="835" y="948" font-size="10" opacity="0.5">🌋</text>
+
+            <!-- Home Port -->
+            <ellipse cx="160" cy="340" rx="60" ry="32" fill="#b08030" opacity="0.45"/>
+            <ellipse cx="160" cy="340" rx="62" ry="34" fill="none" stroke="#7a5010" stroke-width="4" opacity="0.5"/>
+            <text x="124" y="336" font-size="14" opacity="0.7">🏰</text>
+            <text x="160" y="358" text-anchor="middle" font-family="Cinzel,serif" font-size="8" fill="rgba(80,50,10,0.7)" font-weight="700" letter-spacing="2">HOME PORT</text>
+
+            <!-- End Destination -->
+            <ellipse cx="500" cy="1370" rx="130" ry="65" fill="rgba(80,50,180,0.25)" opacity="0.8"/>
+            <ellipse cx="500" cy="1370" rx="132" ry="67" fill="none" stroke="#6050c0" stroke-width="4" opacity="0.5"/>
+            <text x="500" y="1395" text-anchor="middle" font-family="Cinzel,serif" font-size="10" fill="rgba(60,40,150,0.75)" font-weight="700" letter-spacing="2">THE FINAL TREASURE</text>
+          </svg>
+
+          <!-- Finals Lock Veil -->
+          <div class="map-lock-veil" id="finals-veil">
+            <div class="lock-icon-big">🔒</div>
+            <div class="lock-msg">Complete all 25 Midterm Treasure Spots<br>to unlock The Finals Coast</div>
+          </div>
+
+          <!-- Ship Marker -->
+          <div id="ship-marker" style="left:10%;top:18%">
+            <div class="ship-svg-wrap">
+              <svg width="60" height="55" viewBox="0 0 60 55" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8,32 Q15,44 30,46 Q45,44 52,32 Z" fill="#4a2808" stroke="#2a1405" stroke-width="1.5"/>
+                <path d="M10,32 Q17,42 30,44 Q43,42 50,32 Z" fill="#6a3c10"/>
+                <line x1="15" y1="33" x2="18" y2="43" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+                <line x1="30" y1="32" x2="30" y2="44" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+                <line x1="45" y1="33" x2="42" y2="43" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+                <path d="M8,32 L52,32" stroke="#3a1e08" stroke-width="2"/>
+                <line x1="30" y1="8" x2="30" y2="33" stroke="#3a2010" stroke-width="2.5"/>
+                <path d="M30,10 Q42,18 40,28 L30,30 Z" fill="#e8d8a0" stroke="rgba(80,50,10,0.4)" stroke-width="0.8"/>
+                <path d="M30,10 Q18,18 20,28 L30,30 Z" fill="#dcc890" stroke="rgba(80,50,10,0.4)" stroke-width="0.8"/>
+                <path d="M30,8 L42,4 L30,10 Z" fill="#c03020"/>
+                <line x1="30" y1="29" x2="52" y2="22" stroke="#3a2010" stroke-width="1.5"/>
+                <rect x="26" y="5" width="8" height="5" rx="1" fill="#4a2808" stroke="#2a1405" stroke-width="0.8"/>
+                <text x="30" y="54" text-anchor="middle" font-family="Cinzel,serif" font-size="5.5" fill="rgba(80,50,10,0.8)" font-weight="700">YOU ARE HERE</text>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Spots Layer -->
+          <div id="spots-layer"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decorative compass -->
+    <svg class="compass" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="35" cy="35" r="32" fill="none" stroke="#7a5010" stroke-width="2"/>
+      <circle cx="35" cy="35" r="26" fill="rgba(180,130,40,0.1)" stroke="rgba(120,80,20,0.3)" stroke-width="0.8" stroke-dasharray="3 3"/>
+      <polygon points="35,6 38,35 35,26 32,35" fill="#8a5510"/>
+      <polygon points="35,64 32,35 35,44 38,35" fill="#6a4008"/>
+      <polygon points="6,35 35,32 26,35 35,38" fill="#8a5510"/>
+      <polygon points="64,35 35,38 44,35 35,32" fill="#6a4008"/>
+      <circle cx="35" cy="35" r="4" fill="#8a5510"/>
+      <text x="35" y="3" text-anchor="middle" font-size="7" fill="#7a5010" font-family="Cinzel,serif" font-weight="700">N</text>
+    </svg>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       TREASURE SCROLL MODAL
+  ═══════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal" onclick="closeBg(event)">
+    <div class="scroll-wrap">
+      <div class="scroll-rod"></div>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+      <div class="scroll-body">
+        <div class="s-num" id="m-num"></div>
+        <div class="s-name" id="m-name"></div>
+        <div class="s-sec">Definition</div>
+        <div class="s-def" id="m-def"></div>
+        <div class="s-sec">Real-World Example</div>
+        <div class="s-ex" id="m-ex"></div>
+        <div class="answer-section" id="answer-section">
+          <div class="answer-prompt">Answer the Example to Continue →</div>
+          <div id="answer-inputs"></div>
+          <div class="answer-feedback" id="answer-feedback"></div>
+          <button class="btn-check" onclick="checkAnswer()">Check Answer</button>
+          <button class="btn-continue" id="btn-continue" onclick="continueNext()">Continue ⚓</button>
+        </div>
+      </div>
+      <div class="scroll-rod-btm"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       ANSWERS REFERENCE MODAL
+  ═══════════════════════════════════════════════ -->
+  <div class="answers-overlay" id="answers-overlay" onclick="closeAnswersBg(event)">
+    <div class="answers-scroll">
+      <div class="answers-header">
+        <span class="answers-title">📋 Answer Key (Demo Reference)</span>
+        <button class="answers-close" onclick="closeAnswers()">✕</button>
+      </div>
+      <div class="answers-body" id="answers-body"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       COMPLETION MODAL
+  ═══════════════════════════════════════════════ -->
+  <div class="completion-overlay" id="completion-overlay">
+    <div class="completion-scroll">
+
+      <div class="comp-trophy">🏆</div>
+      <div class="comp-title">Voyage Complete!</div>
+      <div class="comp-sub">Algorithms &amp; Complexity · All 42 Treasures Claimed</div>
+
+      <!-- Stats -->
+      <div class="comp-stats">
+        <div class="comp-stat">
+          <span class="comp-stat-val">42</span>
+          <span class="comp-stat-lbl">Treasures found</span>
+        </div>
+        <div class="comp-stat">
+          <span class="comp-stat-val">2</span>
+          <span class="comp-stat-lbl">Regions charted</span>
+        </div>
+        <div class="comp-stat">
+          <span class="comp-stat-val">100%</span>
+          <span class="comp-stat-lbl">Course complete</span>
+        </div>
+      </div>
+
+      <div class="comp-divider"></div>
+
+      <!-- Conclusion -->
+      <div class="comp-conclusion">
+        <p>
+          You did not just learn algorithms. You learned how to think —
+          <span class="comp-highlight">precisely, efficiently, and cleverly</span>
+          — the way every great engineer and problem-solver must.
+          From Euclid's shores to the peaks of Approximation,
+          the seas of logic are now yours to command.
+        </p>
+        <p style="margin-top:0.75rem;">
+          That is the real treasure. And it is yours to keep.
+        </p>
+      </div>
+
+      <!-- Crew thank-you -->
+      <div class="comp-crew-label">✦ &nbsp; A message from the crew &nbsp; ✦</div>
+
+      <div class="comp-crew-grid">
+
+        <div class="comp-crew-card">
+          <div class="comp-crew-top">
+            <div class="comp-crew-init">LO</div>
+            <div class="comp-crew-meta">
+              <div class="comp-crew-name">Lance Ocampo</div>
+              <div class="comp-crew-role">The Captain</div>
+            </div>
+          </div>
+          <div class="comp-crew-quote">
+            "Thank you for trusting this ship. We are proud of every mile you sailed."
+          </div>
+        </div>
+
+        <div class="comp-crew-card">
+          <div class="comp-crew-top">
+            <div class="comp-crew-init">JL</div>
+            <div class="comp-crew-meta">
+              <div class="comp-crew-name">Juliana Lacsina</div>
+              <div class="comp-crew-role">First Mate</div>
+            </div>
+          </div>
+          <div class="comp-crew-quote">
+            "Thank you for staying the course. That determination sets a navigator apart."
+          </div>
+        </div>
+
+        <div class="comp-crew-card">
+          <div class="comp-crew-top">
+            <div class="comp-crew-init">ET</div>
+            <div class="comp-crew-meta">
+              <div class="comp-crew-name">Erin Timbol</div>
+              <div class="comp-crew-role">Navigator</div>
+            </div>
+          </div>
+          <div class="comp-crew-quote">
+            "Thank you for following the map. We hope the journey felt like an adventure."
+          </div>
+        </div>
+
+        <div class="comp-crew-card">
+          <div class="comp-crew-top">
+            <div class="comp-crew-init">KC</div>
+            <div class="comp-crew-meta">
+              <div class="comp-crew-name">Kyle Contreras</div>
+              <div class="comp-crew-role">Cartographer</div>
+            </div>
+          </div>
+          <div class="comp-crew-quote">
+            "Thank you for reading every scroll. The map is complete because you completed it."
+          </div>
+        </div>
+
+      </div>
+
+      <div class="comp-farewell">
+        <span class="comp-farewell-gold">Fair winds and following seas.</span><br>
+        May every algorithm you meet from here feel like familiar waters.
+      </div>
+
+      <button class="comp-btn" onclick="document.getElementById('completion-overlay').classList.remove('open')">
+        ⚓ &nbsp; Sail Home
+      </button>
+
+    </div>
+  </div>
+
+</div><!-- #app -->
+
+<script src="script.js"></script>
+</body>
+</html>
